@@ -28,11 +28,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>Firmata</name>
-			<type>2</type>
-			<locationURI>ArduinoLibPath/Firmata</locationURI>
-		</link>
-		<link>
 			<name>Wire</name>
 			<type>2</type>
 			<locationURI>ArduinoLibPath/Wire</locationURI>
@@ -40,7 +35,7 @@
 		<link>
 			<name>arduino</name>
 			<type>2</type>
-			<locationURI>UltrasonicSensorCommunication2RobotsReceiverarduino/arduino</locationURI>
+			<locationURI>Transmitterarduino/arduino</locationURI>
 		</link>
 		<link>
 			<name>standard</name>

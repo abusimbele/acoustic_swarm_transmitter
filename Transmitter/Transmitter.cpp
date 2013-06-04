@@ -1,9 +1,9 @@
 // Do not remove the include below
-#include "AcousticSwarm.h"
+#include "Transmitter.h"
 #include "Wire.h"
 #include "Message.h"
-//#include "pt.h"
 
+//#include "pt.h"
 
 
 
@@ -15,7 +15,7 @@ const int ULTRA_RECEIV_ADDRESS   =  113;
 int reading=0;
 int controllerReadout=-1;
 int counter=0;
-int msg1_bits[]={0,1,1,0,0,1};
+int msg1_bits[]={1,0,1,0,1,0};
 Message *msg;
 int msg_bit=0;
 
@@ -43,8 +43,12 @@ void activate_receiving_mode(){
 }
 
 
+
+
+
 void send_bit_0(){
 	//do nothing
+
 }
 
 void send_bit_1(){
@@ -54,15 +58,30 @@ void send_bit_1(){
 	   */
 
 
-	  Serial.println("PING");
-	  delay(5);
+	  //Serial.println("PING");
+	  //delay(5);
 	  Wire.beginTransmission(112);
 	  Wire.write(byte(0x00)); // Register 0 -> control register
 	  Wire.write(byte(0x5C)); // Erzeugt einen 8 zyklischen 40khz Impuls/Ton
 	  Wire.endTransmission();
 
-	  delay(2);
+	  //delay(2);
 
+
+}
+
+void send_bit(){
+	msg_bit=(*msg).nextBit();
+//	Serial.print("**p**");
+//	Serial.println(msg_bit);
+	if(msg_bit==1){
+		send_bit_1();
+	}
+	if(msg_bit==0){
+			send_bit_0();
+		}
+
+	controllerReadout=-1;
 
 }
 
@@ -141,39 +160,29 @@ void receive_bit(){
 
 
 void setup() {
+	//Timer1.initialize(30000);
+	//Timer1.attachInterrupt(send_bit);
   (*msg)= send_bit_sequence(msg1_bits);
   Wire.begin();
-  Serial.begin(19200);
-  delay(1000);
-  Serial.print("Msg: ");
-  Serial.print((*msg).get_bitvalues()[0]);
-  Serial.print((*msg).get_bitvalues()[1]);
-  Serial.print((*msg).get_bitvalues()[2]);
-  Serial.print((*msg).get_bitvalues()[3]);
-  Serial.print((*msg).get_bitvalues()[4]);
-  Serial.println((*msg).get_bitvalues()[5]);
-  delay(2000);
+//  Serial.begin(19200);
+
+//  Serial.print("Msg: ");
+//  Serial.print((*msg).get_bitvalues()[0]);
+//  Serial.print((*msg).get_bitvalues()[1]);
+//  Serial.print((*msg).get_bitvalues()[2]);
+//  Serial.print((*msg).get_bitvalues()[3]);
+//  Serial.print((*msg).get_bitvalues()[4]);
+//  Serial.println((*msg).get_bitvalues()[5]);
+
 
 }
 
 
 
 void loop() {
-	msg_bit=(*msg).nextBit();
-	Serial.print("**p**");
-	Serial.println(msg_bit);
-	if(msg_bit==1){
-		send_bit_1();
-	}
-	if(msg_bit==0){
-			send_bit_0();
-		}
 
 
 
-	controllerReadout=-1;
-	activate_receiving_mode();
-	receive_bit();
-	//delay(1000);
-	counter=counter+1;
+
+
 }

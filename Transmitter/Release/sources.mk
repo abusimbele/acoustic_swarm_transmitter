@@ -33,5 +33,4 @@ SIZEDUMMY :=
 SUBDIRS := \
 . \
 arduino \
-Firmata \
 
