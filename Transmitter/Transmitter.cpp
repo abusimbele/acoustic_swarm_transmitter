@@ -18,7 +18,7 @@ int counter=0;
 int msg1_bits[]={1,0,1,0,1,0};
 Message *msg;
 int msg_bit=0;
-const int WAITING_TIME=2000; //65
+const int WAITING_TIME=995; //65
 
 
 
@@ -49,6 +49,7 @@ void activate_receiving_mode(){
 
 void send_bit_0(){
 	//do nothing
+	delay(5);
 
 }
 
@@ -66,7 +67,7 @@ void send_bit_1(){
 	  Wire.write(byte(0x5C)); // Erzeugt einen 8 zyklischen 40khz Impuls/Ton
 	  Wire.endTransmission();
 
-	  //delay(2);
+	  delay(5);
 
 
 }
@@ -145,15 +146,6 @@ void receive_bit(){
 	  Serial.println(reading);
 
 	  Serial.print("DATA-BIT: ");
-	  if(reading>11000)
-	  	  {
-		  Serial.println("0");
-
-	  	  }
-	  else
-	  {Serial.println("1");
-	  }
-
 	  Serial.println("*************");
 }
 
@@ -185,7 +177,8 @@ void loop() {
 	send_bit_1();
 	delay(WAITING_TIME);
 	send_bit_0();
-	delay(65);
+	delay(WAITING_TIME);
+	//delay(65);
 
 
 
