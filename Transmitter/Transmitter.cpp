@@ -18,6 +18,7 @@ int counter=0;
 int msg1_bits[]={1,0,1,0,1,0};
 Message *msg;
 int msg_bit=0;
+const int WAITING_TIME=2000; //65
 
 
 
@@ -82,6 +83,7 @@ void send_bit(){
 		}
 
 	controllerReadout=-1;
+
 
 }
 
@@ -180,6 +182,10 @@ void setup() {
 
 
 void loop() {
+	send_bit_1();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(65);
 
 
 
