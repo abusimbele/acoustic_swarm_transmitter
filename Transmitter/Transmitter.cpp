@@ -174,11 +174,48 @@ void setup() {
 
 
 void loop() {
+	//HEADER_START
+	send_bit_1();
+	delay(WAITING_TIME);
+	//MSG_TYPE 0
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
+	delay(10000);
+
+
+	//HEADER_START
+	send_bit_1();
+	delay(WAITING_TIME);
+	//MSG_TYPE 1
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_1();
+	delay(WAITING_TIME);
+	delay(10000);
+
+	//HEADER_START
+	send_bit_1();
+	delay(WAITING_TIME);
+	//MSG_TYPE 2
+	send_bit_0();
+	delay(WAITING_TIME);
+	send_bit_0();
+	delay(WAITING_TIME);
 	send_bit_1();
 	delay(WAITING_TIME);
 	send_bit_0();
 	delay(WAITING_TIME);
-	//delay(65);
+	delay(10000);
 
 
 
