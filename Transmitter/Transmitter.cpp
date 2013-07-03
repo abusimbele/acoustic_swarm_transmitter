@@ -18,7 +18,7 @@ int counter=0;
 int msg1_bits[]={1,0,1,0,1,0};
 Message *msg;
 int msg_bit=0;
-const int WAITING_TIME=995; //65
+const int WAITING_TIME=295; //65 //995
 
 
 
@@ -186,10 +186,11 @@ void loop() {
 	send_bit_1();
 	delay(WAITING_TIME);
 	send_bit_0();
-	//Parity_BIT
 	delay(WAITING_TIME);
-	send_bit_0();
-	delay(WAITING_TIME);
+
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 
 
@@ -211,9 +212,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_1();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 	//MAC_TO
 	send_bit_0();
@@ -232,9 +233,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_0();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 
 	//DATA_SIZE 2 bytes
@@ -255,9 +256,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_0();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 	//DATA 1st byte
 	send_bit_1();
@@ -320,9 +321,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_1();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 
 	//MAC_FROM
@@ -342,9 +343,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_1();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 	//MAC_TO
 	send_bit_0();
@@ -362,9 +363,10 @@ void loop() {
 	send_bit_1();
 	delay(WAITING_TIME);
 	send_bit_0();
-	//Parity_BIT
-	send_bit_0();
 	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 	delay(10000);
 
 
@@ -383,9 +385,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_0();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_1();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_1();
+//	delay(WAITING_TIME);
 
 	//MAC_FROM
 	send_bit_0();
@@ -404,9 +406,9 @@ void loop() {
 	delay(WAITING_TIME);
 	send_bit_1();
 	delay(WAITING_TIME);
-	//Parity_BIT
-	send_bit_0();
-	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 
 	//MAC_TO
 	send_bit_0();
@@ -424,9 +426,10 @@ void loop() {
 	send_bit_1();
 	delay(WAITING_TIME);
 	send_bit_0();
-	//Parity_BIT
-	send_bit_0();
 	delay(WAITING_TIME);
+//	//Parity_BIT
+//	send_bit_0();
+//	delay(WAITING_TIME);
 	delay(10000);
 
 
@@ -444,9 +447,9 @@ void loop() {
 		delay(WAITING_TIME);
 		send_bit_0();
 		delay(WAITING_TIME);
-		//Parity_BIT
-		send_bit_0();
-		delay(WAITING_TIME);
+//		//Parity_BIT
+//		send_bit_0();
+//		delay(WAITING_TIME);
 
 
 
@@ -467,9 +470,9 @@ void loop() {
 		delay(WAITING_TIME);
 		send_bit_1();
 		delay(WAITING_TIME);
-		//Parity_BIT
-		send_bit_0();
-		delay(WAITING_TIME);
+//		//Parity_BIT
+//		send_bit_0();
+//		delay(WAITING_TIME);
 
 		//MAC_TO
 		send_bit_0();
@@ -488,9 +491,9 @@ void loop() {
 		delay(WAITING_TIME);
 		send_bit_0();
 		delay(WAITING_TIME);
-		//Parity_BIT
-		send_bit_0();
-		delay(WAITING_TIME);
+//		//Parity_BIT
+//		send_bit_0();
+//		delay(WAITING_TIME);
 
 
 		//DATA_SIZE 3 bytes
@@ -511,9 +514,9 @@ void loop() {
 		delay(WAITING_TIME);
 		send_bit_1();
 		delay(WAITING_TIME);
-		//Parity_BIT
-		send_bit_1();
-		delay(WAITING_TIME);
+//		//Parity_BIT
+//		send_bit_1();
+//		delay(WAITING_TIME);
 
 		//DATA 1st byte
 		send_bit_0();
