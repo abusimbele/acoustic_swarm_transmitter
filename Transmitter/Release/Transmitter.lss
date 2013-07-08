@@ -3,29 +3,29 @@ Transmitter.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000040  00800100  000023c0  00002454  2**0
+  0 .data         00000040  00800100  0000278c  00002820  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000023c0  00000000  00000000  00000094  2**1
+  1 .text         0000278c  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000188  00800140  00800140  00002494  2**0
+  2 .bss          00000188  00800140  00800140  00002860  2**0
                   ALLOC
-  3 .debug_aranges 00000880  00000000  00000000  00002494  2**0
+  3 .debug_aranges 00000868  00000000  00000000  00002860  2**0
                   CONTENTS, READONLY, DEBUGGING
-  4 .debug_pubnames 000016d7  00000000  00000000  00002d14  2**0
+  4 .debug_pubnames 00001699  00000000  00000000  000030c8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   0000b946  00000000  00000000  000043eb  2**0
+  5 .debug_info   0000b8ed  00000000  00000000  00004761  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00002659  00000000  00000000  0000fd31  2**0
+  6 .debug_abbrev 0000264a  00000000  00000000  0001004e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   0000609b  00000000  00000000  0001238a  2**0
+  7 .debug_line   000062e9  00000000  00000000  00012698  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00001010  00000000  00000000  00018428  2**2
+  8 .debug_frame  00000fe0  00000000  00000000  00018984  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00002704  00000000  00000000  00019438  2**0
+  9 .debug_str    00002696  00000000  00000000  00019964  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00005758  00000000  00000000  0001bb3c  2**0
+ 10 .debug_loc    00005758  00000000  00000000  0001bffa  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000738  00000000  00000000  00021294  2**0
+ 11 .debug_ranges 00000720  00000000  00000000  00021752  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -73,12 +73,12 @@ void operator delete[](void * ptr)
 
 }
       14:	0c 94 8d 00 	jmp	0x11a	; 0x11a <__bad_interrupt>
-	return msg;
+	  delay(5);
 
 
 }
 
-void activate_receiving_mode(){
+void send_bit(){
       18:	0c 94 8d 00 	jmp	0x11a	; 0x11a <__bad_interrupt>
   // set address of targeted slave
   txAddress = address;
@@ -133,7 +133,7 @@ void activate_receiving_mode(){
 000000c4 <__ctors_start>:
       c4:	e3 08       	sbc	r14, r3
       c6:	39 09       	sbc	r19, r9
-      c8:	fd 10       	cpse	r15, r13
+      c8:	e3 12       	cpse	r14, r19
 
 000000ca <__ctors_end>:
       ca:	11 24       	eor	r1, r1
@@ -147,8 +147,8 @@ void activate_receiving_mode(){
       d6:	11 e0       	ldi	r17, 0x01	; 1
       d8:	a0 e0       	ldi	r26, 0x00	; 0
       da:	b1 e0       	ldi	r27, 0x01	; 1
-      dc:	e0 ec       	ldi	r30, 0xC0	; 192
-      de:	f3 e2       	ldi	r31, 0x23	; 35
+      dc:	ec e8       	ldi	r30, 0x8C	; 140
+      de:	f7 e2       	ldi	r31, 0x27	; 39
       e0:	02 c0       	rjmp	.+4      	; 0xe6 <.do_copy_data_start>
 
 000000e2 <.do_copy_data_loop>:
@@ -183,14 +183,14 @@ void activate_receiving_mode(){
 00000104 <.do_global_ctors_loop>:
      104:	22 97       	sbiw	r28, 0x02	; 2
      106:	fe 01       	movw	r30, r28
-     108:	0e 94 da 11 	call	0x23b4	; 0x23b4 <__tablejump__>
+     108:	0e 94 c0 13 	call	0x2780	; 0x2780 <__tablejump__>
 
 0000010c <.do_global_ctors_start>:
      10c:	c4 3c       	cpi	r28, 0xC4	; 196
      10e:	d1 07       	cpc	r29, r17
      110:	c9 f7       	brne	.-14     	; 0x104 <.do_global_ctors_loop>
      112:	0e 94 f1 0a 	call	0x15e2	; 0x15e2 <main>
-     116:	0c 94 de 11 	jmp	0x23bc	; 0x23bc <_exit>
+     116:	0c 94 c4 13 	jmp	0x2788	; 0x2788 <_exit>
 
 0000011a <__bad_interrupt>:
      11a:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -3890,7 +3890,7 @@ size_t Print::printNumber(unsigned long n, uint8_t base) {
     1400:	75 2f       	mov	r23, r21
     1402:	a5 01       	movw	r20, r10
     1404:	94 01       	movw	r18, r8
-    1406:	0e 94 b6 11 	call	0x236c	; 0x236c <__udivmodsi4>
+    1406:	0e 94 9c 13 	call	0x2738	; 0x2738 <__udivmodsi4>
     140a:	79 01       	movw	r14, r18
     140c:	8a 01       	movw	r16, r20
     char c = m - base * n;
@@ -3898,7 +3898,7 @@ size_t Print::printNumber(unsigned long n, uint8_t base) {
     1410:	b7 01       	movw	r22, r14
     1412:	a5 01       	movw	r20, r10
     1414:	94 01       	movw	r18, r8
-    1416:	0e 94 97 11 	call	0x232e	; 0x232e <__mulsi3>
+    1416:	0e 94 7d 13 	call	0x26fa	; 0x26fa <__mulsi3>
     141a:	47 2d       	mov	r20, r7
     141c:	46 1b       	sub	r20, r22
     *--str = c < 10 ? c + '0' : c + 'A' - 10;
@@ -4225,7 +4225,7 @@ int main(void)
 #endif
 	
 	setup();
-    15ea:	0e 94 88 10 	call	0x2110	; 0x2110 <setup>
+    15ea:	0e 94 6e 12 	call	0x24dc	; 0x24dc <setup>
     
 	for (;;) {
 		loop();
@@ -4401,18 +4401,18 @@ void send_bit_1(){
     16aa:	c8 01       	movw	r24, r16
     16ac:	60 e7       	ldi	r22, 0x70	; 112
     16ae:	70 e0       	ldi	r23, 0x00	; 0
-    16b0:	0e 94 c3 10 	call	0x2186	; 0x2186 <_ZN7TwoWire17beginTransmissionEi>
+    16b0:	0e 94 a9 12 	call	0x2552	; 0x2552 <_ZN7TwoWire17beginTransmissionEi>
 	  Wire.write(byte(0x00)); // Register 0 -> control register
     16b4:	c8 01       	movw	r24, r16
     16b6:	60 e0       	ldi	r22, 0x00	; 0
-    16b8:	0e 94 45 11 	call	0x228a	; 0x228a <_ZN7TwoWire5writeEh>
+    16b8:	0e 94 2b 13 	call	0x2656	; 0x2656 <_ZN7TwoWire5writeEh>
 	  Wire.write(byte(0x5C)); // Erzeugt einen 8 zyklischen 40khz Impuls/Ton
     16bc:	c8 01       	movw	r24, r16
     16be:	6c e5       	ldi	r22, 0x5C	; 92
-    16c0:	0e 94 45 11 	call	0x228a	; 0x228a <_ZN7TwoWire5writeEh>
+    16c0:	0e 94 2b 13 	call	0x2656	; 0x2656 <_ZN7TwoWire5writeEh>
 	  Wire.endTransmission();
     16c4:	c8 01       	movw	r24, r16
-    16c6:	0e 94 88 11 	call	0x2310	; 0x2310 <_ZN7TwoWire15endTransmissionEv>
+    16c6:	0e 94 6e 13 	call	0x26dc	; 0x26dc <_ZN7TwoWire15endTransmissionEv>
 
 	  delay(5);
     16ca:	65 e0       	ldi	r22, 0x05	; 5
@@ -4436,8 +4436,8 @@ void loop() {
 	send_bit_1();
     16dc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    16e0:	67 e2       	ldi	r22, 0x27	; 39
-    16e2:	71 e0       	ldi	r23, 0x01	; 1
+    16e0:	61 e4       	ldi	r22, 0x41	; 65
+    16e2:	70 e0       	ldi	r23, 0x00	; 0
     16e4:	80 e0       	ldi	r24, 0x00	; 0
     16e6:	90 e0       	ldi	r25, 0x00	; 0
     16e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4446,32 +4446,32 @@ void loop() {
 	send_bit_0();
     16ec:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    16f0:	67 e2       	ldi	r22, 0x27	; 39
-    16f2:	71 e0       	ldi	r23, 0x01	; 1
+    16f0:	61 e4       	ldi	r22, 0x41	; 65
+    16f2:	70 e0       	ldi	r23, 0x00	; 0
     16f4:	80 e0       	ldi	r24, 0x00	; 0
     16f6:	90 e0       	ldi	r25, 0x00	; 0
     16f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     16fc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1700:	67 e2       	ldi	r22, 0x27	; 39
-    1702:	71 e0       	ldi	r23, 0x01	; 1
+    1700:	61 e4       	ldi	r22, 0x41	; 65
+    1702:	70 e0       	ldi	r23, 0x00	; 0
     1704:	80 e0       	ldi	r24, 0x00	; 0
     1706:	90 e0       	ldi	r25, 0x00	; 0
     1708:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     170c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1710:	67 e2       	ldi	r22, 0x27	; 39
-    1712:	71 e0       	ldi	r23, 0x01	; 1
+    1710:	61 e4       	ldi	r22, 0x41	; 65
+    1712:	70 e0       	ldi	r23, 0x00	; 0
     1714:	80 e0       	ldi	r24, 0x00	; 0
     1716:	90 e0       	ldi	r25, 0x00	; 0
     1718:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     171c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1720:	67 e2       	ldi	r22, 0x27	; 39
-    1722:	71 e0       	ldi	r23, 0x01	; 1
+    1720:	61 e4       	ldi	r22, 0x41	; 65
+    1722:	70 e0       	ldi	r23, 0x00	; 0
     1724:	80 e0       	ldi	r24, 0x00	; 0
     1726:	90 e0       	ldi	r25, 0x00	; 0
     1728:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4480,8 +4480,8 @@ void loop() {
 	send_bit_0();
     172c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1730:	67 e2       	ldi	r22, 0x27	; 39
-    1732:	71 e0       	ldi	r23, 0x01	; 1
+    1730:	61 e4       	ldi	r22, 0x41	; 65
+    1732:	70 e0       	ldi	r23, 0x00	; 0
     1734:	80 e0       	ldi	r24, 0x00	; 0
     1736:	90 e0       	ldi	r25, 0x00	; 0
     1738:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4493,64 +4493,64 @@ void loop() {
 	send_bit_0();
     173c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1740:	67 e2       	ldi	r22, 0x27	; 39
-    1742:	71 e0       	ldi	r23, 0x01	; 1
+    1740:	61 e4       	ldi	r22, 0x41	; 65
+    1742:	70 e0       	ldi	r23, 0x00	; 0
     1744:	80 e0       	ldi	r24, 0x00	; 0
     1746:	90 e0       	ldi	r25, 0x00	; 0
     1748:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     174c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1750:	67 e2       	ldi	r22, 0x27	; 39
-    1752:	71 e0       	ldi	r23, 0x01	; 1
+    1750:	61 e4       	ldi	r22, 0x41	; 65
+    1752:	70 e0       	ldi	r23, 0x00	; 0
     1754:	80 e0       	ldi	r24, 0x00	; 0
     1756:	90 e0       	ldi	r25, 0x00	; 0
     1758:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     175c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1760:	67 e2       	ldi	r22, 0x27	; 39
-    1762:	71 e0       	ldi	r23, 0x01	; 1
+    1760:	61 e4       	ldi	r22, 0x41	; 65
+    1762:	70 e0       	ldi	r23, 0x00	; 0
     1764:	80 e0       	ldi	r24, 0x00	; 0
     1766:	90 e0       	ldi	r25, 0x00	; 0
     1768:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     176c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1770:	67 e2       	ldi	r22, 0x27	; 39
-    1772:	71 e0       	ldi	r23, 0x01	; 1
+    1770:	61 e4       	ldi	r22, 0x41	; 65
+    1772:	70 e0       	ldi	r23, 0x00	; 0
     1774:	80 e0       	ldi	r24, 0x00	; 0
     1776:	90 e0       	ldi	r25, 0x00	; 0
     1778:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     177c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1780:	67 e2       	ldi	r22, 0x27	; 39
-    1782:	71 e0       	ldi	r23, 0x01	; 1
+    1780:	61 e4       	ldi	r22, 0x41	; 65
+    1782:	70 e0       	ldi	r23, 0x00	; 0
     1784:	80 e0       	ldi	r24, 0x00	; 0
     1786:	90 e0       	ldi	r25, 0x00	; 0
     1788:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     178c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1790:	67 e2       	ldi	r22, 0x27	; 39
-    1792:	71 e0       	ldi	r23, 0x01	; 1
+    1790:	61 e4       	ldi	r22, 0x41	; 65
+    1792:	70 e0       	ldi	r23, 0x00	; 0
     1794:	80 e0       	ldi	r24, 0x00	; 0
     1796:	90 e0       	ldi	r25, 0x00	; 0
     1798:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     179c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    17a0:	67 e2       	ldi	r22, 0x27	; 39
-    17a2:	71 e0       	ldi	r23, 0x01	; 1
+    17a0:	61 e4       	ldi	r22, 0x41	; 65
+    17a2:	70 e0       	ldi	r23, 0x00	; 0
     17a4:	80 e0       	ldi	r24, 0x00	; 0
     17a6:	90 e0       	ldi	r25, 0x00	; 0
     17a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     17ac:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    17b0:	67 e2       	ldi	r22, 0x27	; 39
-    17b2:	71 e0       	ldi	r23, 0x01	; 1
+    17b0:	61 e4       	ldi	r22, 0x41	; 65
+    17b2:	70 e0       	ldi	r23, 0x00	; 0
     17b4:	80 e0       	ldi	r24, 0x00	; 0
     17b6:	90 e0       	ldi	r25, 0x00	; 0
     17b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4558,8 +4558,8 @@ void loop() {
 	send_bit_0();
     17bc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    17c0:	67 e2       	ldi	r22, 0x27	; 39
-    17c2:	71 e0       	ldi	r23, 0x01	; 1
+    17c0:	61 e4       	ldi	r22, 0x41	; 65
+    17c2:	70 e0       	ldi	r23, 0x00	; 0
     17c4:	80 e0       	ldi	r24, 0x00	; 0
     17c6:	90 e0       	ldi	r25, 0x00	; 0
     17c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4568,64 +4568,64 @@ void loop() {
 	send_bit_0();
     17cc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    17d0:	67 e2       	ldi	r22, 0x27	; 39
-    17d2:	71 e0       	ldi	r23, 0x01	; 1
+    17d0:	61 e4       	ldi	r22, 0x41	; 65
+    17d2:	70 e0       	ldi	r23, 0x00	; 0
     17d4:	80 e0       	ldi	r24, 0x00	; 0
     17d6:	90 e0       	ldi	r25, 0x00	; 0
     17d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     17dc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    17e0:	67 e2       	ldi	r22, 0x27	; 39
-    17e2:	71 e0       	ldi	r23, 0x01	; 1
+    17e0:	61 e4       	ldi	r22, 0x41	; 65
+    17e2:	70 e0       	ldi	r23, 0x00	; 0
     17e4:	80 e0       	ldi	r24, 0x00	; 0
     17e6:	90 e0       	ldi	r25, 0x00	; 0
     17e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     17ec:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    17f0:	67 e2       	ldi	r22, 0x27	; 39
-    17f2:	71 e0       	ldi	r23, 0x01	; 1
+    17f0:	61 e4       	ldi	r22, 0x41	; 65
+    17f2:	70 e0       	ldi	r23, 0x00	; 0
     17f4:	80 e0       	ldi	r24, 0x00	; 0
     17f6:	90 e0       	ldi	r25, 0x00	; 0
     17f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     17fc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1800:	67 e2       	ldi	r22, 0x27	; 39
-    1802:	71 e0       	ldi	r23, 0x01	; 1
+    1800:	61 e4       	ldi	r22, 0x41	; 65
+    1802:	70 e0       	ldi	r23, 0x00	; 0
     1804:	80 e0       	ldi	r24, 0x00	; 0
     1806:	90 e0       	ldi	r25, 0x00	; 0
     1808:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     180c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1810:	67 e2       	ldi	r22, 0x27	; 39
-    1812:	71 e0       	ldi	r23, 0x01	; 1
+    1810:	61 e4       	ldi	r22, 0x41	; 65
+    1812:	70 e0       	ldi	r23, 0x00	; 0
     1814:	80 e0       	ldi	r24, 0x00	; 0
     1816:	90 e0       	ldi	r25, 0x00	; 0
     1818:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     181c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1820:	67 e2       	ldi	r22, 0x27	; 39
-    1822:	71 e0       	ldi	r23, 0x01	; 1
+    1820:	61 e4       	ldi	r22, 0x41	; 65
+    1822:	70 e0       	ldi	r23, 0x00	; 0
     1824:	80 e0       	ldi	r24, 0x00	; 0
     1826:	90 e0       	ldi	r25, 0x00	; 0
     1828:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     182c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1830:	67 e2       	ldi	r22, 0x27	; 39
-    1832:	71 e0       	ldi	r23, 0x01	; 1
+    1830:	61 e4       	ldi	r22, 0x41	; 65
+    1832:	70 e0       	ldi	r23, 0x00	; 0
     1834:	80 e0       	ldi	r24, 0x00	; 0
     1836:	90 e0       	ldi	r25, 0x00	; 0
     1838:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     183c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1840:	67 e2       	ldi	r22, 0x27	; 39
-    1842:	71 e0       	ldi	r23, 0x01	; 1
+    1840:	61 e4       	ldi	r22, 0x41	; 65
+    1842:	70 e0       	ldi	r23, 0x00	; 0
     1844:	80 e0       	ldi	r24, 0x00	; 0
     1846:	90 e0       	ldi	r25, 0x00	; 0
     1848:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4633,8 +4633,8 @@ void loop() {
 	send_bit_0();
     184c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1850:	67 e2       	ldi	r22, 0x27	; 39
-    1852:	71 e0       	ldi	r23, 0x01	; 1
+    1850:	61 e4       	ldi	r22, 0x41	; 65
+    1852:	70 e0       	ldi	r23, 0x00	; 0
     1854:	80 e0       	ldi	r24, 0x00	; 0
     1856:	90 e0       	ldi	r25, 0x00	; 0
     1858:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4645,64 +4645,64 @@ void loop() {
 	send_bit_0();
     185c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1860:	67 e2       	ldi	r22, 0x27	; 39
-    1862:	71 e0       	ldi	r23, 0x01	; 1
+    1860:	61 e4       	ldi	r22, 0x41	; 65
+    1862:	70 e0       	ldi	r23, 0x00	; 0
     1864:	80 e0       	ldi	r24, 0x00	; 0
     1866:	90 e0       	ldi	r25, 0x00	; 0
     1868:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     186c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1870:	67 e2       	ldi	r22, 0x27	; 39
-    1872:	71 e0       	ldi	r23, 0x01	; 1
+    1870:	61 e4       	ldi	r22, 0x41	; 65
+    1872:	70 e0       	ldi	r23, 0x00	; 0
     1874:	80 e0       	ldi	r24, 0x00	; 0
     1876:	90 e0       	ldi	r25, 0x00	; 0
     1878:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     187c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1880:	67 e2       	ldi	r22, 0x27	; 39
-    1882:	71 e0       	ldi	r23, 0x01	; 1
+    1880:	61 e4       	ldi	r22, 0x41	; 65
+    1882:	70 e0       	ldi	r23, 0x00	; 0
     1884:	80 e0       	ldi	r24, 0x00	; 0
     1886:	90 e0       	ldi	r25, 0x00	; 0
     1888:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     188c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1890:	67 e2       	ldi	r22, 0x27	; 39
-    1892:	71 e0       	ldi	r23, 0x01	; 1
+    1890:	61 e4       	ldi	r22, 0x41	; 65
+    1892:	70 e0       	ldi	r23, 0x00	; 0
     1894:	80 e0       	ldi	r24, 0x00	; 0
     1896:	90 e0       	ldi	r25, 0x00	; 0
     1898:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     189c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    18a0:	67 e2       	ldi	r22, 0x27	; 39
-    18a2:	71 e0       	ldi	r23, 0x01	; 1
+    18a0:	61 e4       	ldi	r22, 0x41	; 65
+    18a2:	70 e0       	ldi	r23, 0x00	; 0
     18a4:	80 e0       	ldi	r24, 0x00	; 0
     18a6:	90 e0       	ldi	r25, 0x00	; 0
     18a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     18ac:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    18b0:	67 e2       	ldi	r22, 0x27	; 39
-    18b2:	71 e0       	ldi	r23, 0x01	; 1
+    18b0:	61 e4       	ldi	r22, 0x41	; 65
+    18b2:	70 e0       	ldi	r23, 0x00	; 0
     18b4:	80 e0       	ldi	r24, 0x00	; 0
     18b6:	90 e0       	ldi	r25, 0x00	; 0
     18b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     18bc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    18c0:	67 e2       	ldi	r22, 0x27	; 39
-    18c2:	71 e0       	ldi	r23, 0x01	; 1
+    18c0:	61 e4       	ldi	r22, 0x41	; 65
+    18c2:	70 e0       	ldi	r23, 0x00	; 0
     18c4:	80 e0       	ldi	r24, 0x00	; 0
     18c6:	90 e0       	ldi	r25, 0x00	; 0
     18c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     18cc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    18d0:	67 e2       	ldi	r22, 0x27	; 39
-    18d2:	71 e0       	ldi	r23, 0x01	; 1
+    18d0:	61 e4       	ldi	r22, 0x41	; 65
+    18d2:	70 e0       	ldi	r23, 0x00	; 0
     18d4:	80 e0       	ldi	r24, 0x00	; 0
     18d6:	90 e0       	ldi	r25, 0x00	; 0
     18d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4710,8 +4710,8 @@ void loop() {
 	send_bit_0();
     18dc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    18e0:	67 e2       	ldi	r22, 0x27	; 39
-    18e2:	71 e0       	ldi	r23, 0x01	; 1
+    18e0:	61 e4       	ldi	r22, 0x41	; 65
+    18e2:	70 e0       	ldi	r23, 0x00	; 0
     18e4:	80 e0       	ldi	r24, 0x00	; 0
     18e6:	90 e0       	ldi	r25, 0x00	; 0
     18e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4720,64 +4720,64 @@ void loop() {
 	send_bit_1();
     18ec:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    18f0:	67 e2       	ldi	r22, 0x27	; 39
-    18f2:	71 e0       	ldi	r23, 0x01	; 1
+    18f0:	61 e4       	ldi	r22, 0x41	; 65
+    18f2:	70 e0       	ldi	r23, 0x00	; 0
     18f4:	80 e0       	ldi	r24, 0x00	; 0
     18f6:	90 e0       	ldi	r25, 0x00	; 0
     18f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     18fc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1900:	67 e2       	ldi	r22, 0x27	; 39
-    1902:	71 e0       	ldi	r23, 0x01	; 1
+    1900:	61 e4       	ldi	r22, 0x41	; 65
+    1902:	70 e0       	ldi	r23, 0x00	; 0
     1904:	80 e0       	ldi	r24, 0x00	; 0
     1906:	90 e0       	ldi	r25, 0x00	; 0
     1908:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     190c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1910:	67 e2       	ldi	r22, 0x27	; 39
-    1912:	71 e0       	ldi	r23, 0x01	; 1
+    1910:	61 e4       	ldi	r22, 0x41	; 65
+    1912:	70 e0       	ldi	r23, 0x00	; 0
     1914:	80 e0       	ldi	r24, 0x00	; 0
     1916:	90 e0       	ldi	r25, 0x00	; 0
     1918:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     191c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1920:	67 e2       	ldi	r22, 0x27	; 39
-    1922:	71 e0       	ldi	r23, 0x01	; 1
+    1920:	61 e4       	ldi	r22, 0x41	; 65
+    1922:	70 e0       	ldi	r23, 0x00	; 0
     1924:	80 e0       	ldi	r24, 0x00	; 0
     1926:	90 e0       	ldi	r25, 0x00	; 0
     1928:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     192c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1930:	67 e2       	ldi	r22, 0x27	; 39
-    1932:	71 e0       	ldi	r23, 0x01	; 1
+    1930:	61 e4       	ldi	r22, 0x41	; 65
+    1932:	70 e0       	ldi	r23, 0x00	; 0
     1934:	80 e0       	ldi	r24, 0x00	; 0
     1936:	90 e0       	ldi	r25, 0x00	; 0
     1938:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     193c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1940:	67 e2       	ldi	r22, 0x27	; 39
-    1942:	71 e0       	ldi	r23, 0x01	; 1
+    1940:	61 e4       	ldi	r22, 0x41	; 65
+    1942:	70 e0       	ldi	r23, 0x00	; 0
     1944:	80 e0       	ldi	r24, 0x00	; 0
     1946:	90 e0       	ldi	r25, 0x00	; 0
     1948:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     194c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1950:	67 e2       	ldi	r22, 0x27	; 39
-    1952:	71 e0       	ldi	r23, 0x01	; 1
+    1950:	61 e4       	ldi	r22, 0x41	; 65
+    1952:	70 e0       	ldi	r23, 0x00	; 0
     1954:	80 e0       	ldi	r24, 0x00	; 0
     1956:	90 e0       	ldi	r25, 0x00	; 0
     1958:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     195c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1960:	67 e2       	ldi	r22, 0x27	; 39
-    1962:	71 e0       	ldi	r23, 0x01	; 1
+    1960:	61 e4       	ldi	r22, 0x41	; 65
+    1962:	70 e0       	ldi	r23, 0x00	; 0
     1964:	80 e0       	ldi	r24, 0x00	; 0
     1966:	90 e0       	ldi	r25, 0x00	; 0
     1968:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4785,8 +4785,8 @@ void loop() {
 	send_bit_1();
     196c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1970:	67 e2       	ldi	r22, 0x27	; 39
-    1972:	71 e0       	ldi	r23, 0x01	; 1
+    1970:	61 e4       	ldi	r22, 0x41	; 65
+    1972:	70 e0       	ldi	r23, 0x00	; 0
     1974:	80 e0       	ldi	r24, 0x00	; 0
     1976:	90 e0       	ldi	r25, 0x00	; 0
     1978:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4796,64 +4796,64 @@ void loop() {
 	send_bit_0();
     197c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1980:	67 e2       	ldi	r22, 0x27	; 39
-    1982:	71 e0       	ldi	r23, 0x01	; 1
+    1980:	61 e4       	ldi	r22, 0x41	; 65
+    1982:	70 e0       	ldi	r23, 0x00	; 0
     1984:	80 e0       	ldi	r24, 0x00	; 0
     1986:	90 e0       	ldi	r25, 0x00	; 0
     1988:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     198c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1990:	67 e2       	ldi	r22, 0x27	; 39
-    1992:	71 e0       	ldi	r23, 0x01	; 1
+    1990:	61 e4       	ldi	r22, 0x41	; 65
+    1992:	70 e0       	ldi	r23, 0x00	; 0
     1994:	80 e0       	ldi	r24, 0x00	; 0
     1996:	90 e0       	ldi	r25, 0x00	; 0
     1998:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     199c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    19a0:	67 e2       	ldi	r22, 0x27	; 39
-    19a2:	71 e0       	ldi	r23, 0x01	; 1
+    19a0:	61 e4       	ldi	r22, 0x41	; 65
+    19a2:	70 e0       	ldi	r23, 0x00	; 0
     19a4:	80 e0       	ldi	r24, 0x00	; 0
     19a6:	90 e0       	ldi	r25, 0x00	; 0
     19a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     19ac:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    19b0:	67 e2       	ldi	r22, 0x27	; 39
-    19b2:	71 e0       	ldi	r23, 0x01	; 1
+    19b0:	61 e4       	ldi	r22, 0x41	; 65
+    19b2:	70 e0       	ldi	r23, 0x00	; 0
     19b4:	80 e0       	ldi	r24, 0x00	; 0
     19b6:	90 e0       	ldi	r25, 0x00	; 0
     19b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     19bc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    19c0:	67 e2       	ldi	r22, 0x27	; 39
-    19c2:	71 e0       	ldi	r23, 0x01	; 1
+    19c0:	61 e4       	ldi	r22, 0x41	; 65
+    19c2:	70 e0       	ldi	r23, 0x00	; 0
     19c4:	80 e0       	ldi	r24, 0x00	; 0
     19c6:	90 e0       	ldi	r25, 0x00	; 0
     19c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     19cc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    19d0:	67 e2       	ldi	r22, 0x27	; 39
-    19d2:	71 e0       	ldi	r23, 0x01	; 1
+    19d0:	61 e4       	ldi	r22, 0x41	; 65
+    19d2:	70 e0       	ldi	r23, 0x00	; 0
     19d4:	80 e0       	ldi	r24, 0x00	; 0
     19d6:	90 e0       	ldi	r25, 0x00	; 0
     19d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     19dc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    19e0:	67 e2       	ldi	r22, 0x27	; 39
-    19e2:	71 e0       	ldi	r23, 0x01	; 1
+    19e0:	61 e4       	ldi	r22, 0x41	; 65
+    19e2:	70 e0       	ldi	r23, 0x00	; 0
     19e4:	80 e0       	ldi	r24, 0x00	; 0
     19e6:	90 e0       	ldi	r25, 0x00	; 0
     19e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     19ec:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    19f0:	67 e2       	ldi	r22, 0x27	; 39
-    19f2:	71 e0       	ldi	r23, 0x01	; 1
+    19f0:	61 e4       	ldi	r22, 0x41	; 65
+    19f2:	70 e0       	ldi	r23, 0x00	; 0
     19f4:	80 e0       	ldi	r24, 0x00	; 0
     19f6:	90 e0       	ldi	r25, 0x00	; 0
     19f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4861,8 +4861,8 @@ void loop() {
 	send_bit_1();
     19fc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1a00:	67 e2       	ldi	r22, 0x27	; 39
-    1a02:	71 e0       	ldi	r23, 0x01	; 1
+    1a00:	61 e4       	ldi	r22, 0x41	; 65
+    1a02:	70 e0       	ldi	r23, 0x00	; 0
     1a04:	80 e0       	ldi	r24, 0x00	; 0
     1a06:	90 e0       	ldi	r25, 0x00	; 0
     1a08:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4880,8 +4880,8 @@ void loop() {
 	send_bit_1();
     1a18:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1a1c:	67 e2       	ldi	r22, 0x27	; 39
-    1a1e:	71 e0       	ldi	r23, 0x01	; 1
+    1a1c:	61 e4       	ldi	r22, 0x41	; 65
+    1a1e:	70 e0       	ldi	r23, 0x00	; 0
     1a20:	80 e0       	ldi	r24, 0x00	; 0
     1a22:	90 e0       	ldi	r25, 0x00	; 0
     1a24:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4890,32 +4890,32 @@ void loop() {
 	send_bit_0();
     1a28:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a2c:	67 e2       	ldi	r22, 0x27	; 39
-    1a2e:	71 e0       	ldi	r23, 0x01	; 1
+    1a2c:	61 e4       	ldi	r22, 0x41	; 65
+    1a2e:	70 e0       	ldi	r23, 0x00	; 0
     1a30:	80 e0       	ldi	r24, 0x00	; 0
     1a32:	90 e0       	ldi	r25, 0x00	; 0
     1a34:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1a38:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a3c:	67 e2       	ldi	r22, 0x27	; 39
-    1a3e:	71 e0       	ldi	r23, 0x01	; 1
+    1a3c:	61 e4       	ldi	r22, 0x41	; 65
+    1a3e:	70 e0       	ldi	r23, 0x00	; 0
     1a40:	80 e0       	ldi	r24, 0x00	; 0
     1a42:	90 e0       	ldi	r25, 0x00	; 0
     1a44:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1a48:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a4c:	67 e2       	ldi	r22, 0x27	; 39
-    1a4e:	71 e0       	ldi	r23, 0x01	; 1
+    1a4c:	61 e4       	ldi	r22, 0x41	; 65
+    1a4e:	70 e0       	ldi	r23, 0x00	; 0
     1a50:	80 e0       	ldi	r24, 0x00	; 0
     1a52:	90 e0       	ldi	r25, 0x00	; 0
     1a54:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     1a58:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1a5c:	67 e2       	ldi	r22, 0x27	; 39
-    1a5e:	71 e0       	ldi	r23, 0x01	; 1
+    1a5c:	61 e4       	ldi	r22, 0x41	; 65
+    1a5e:	70 e0       	ldi	r23, 0x00	; 0
     1a60:	80 e0       	ldi	r24, 0x00	; 0
     1a62:	90 e0       	ldi	r25, 0x00	; 0
     1a64:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4923,8 +4923,8 @@ void loop() {
 	send_bit_0();
     1a68:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a6c:	67 e2       	ldi	r22, 0x27	; 39
-    1a6e:	71 e0       	ldi	r23, 0x01	; 1
+    1a6c:	61 e4       	ldi	r22, 0x41	; 65
+    1a6e:	70 e0       	ldi	r23, 0x00	; 0
     1a70:	80 e0       	ldi	r24, 0x00	; 0
     1a72:	90 e0       	ldi	r25, 0x00	; 0
     1a74:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4934,64 +4934,64 @@ void loop() {
 	send_bit_0();
     1a78:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a7c:	67 e2       	ldi	r22, 0x27	; 39
-    1a7e:	71 e0       	ldi	r23, 0x01	; 1
+    1a7c:	61 e4       	ldi	r22, 0x41	; 65
+    1a7e:	70 e0       	ldi	r23, 0x00	; 0
     1a80:	80 e0       	ldi	r24, 0x00	; 0
     1a82:	90 e0       	ldi	r25, 0x00	; 0
     1a84:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1a88:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a8c:	67 e2       	ldi	r22, 0x27	; 39
-    1a8e:	71 e0       	ldi	r23, 0x01	; 1
+    1a8c:	61 e4       	ldi	r22, 0x41	; 65
+    1a8e:	70 e0       	ldi	r23, 0x00	; 0
     1a90:	80 e0       	ldi	r24, 0x00	; 0
     1a92:	90 e0       	ldi	r25, 0x00	; 0
     1a94:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1a98:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1a9c:	67 e2       	ldi	r22, 0x27	; 39
-    1a9e:	71 e0       	ldi	r23, 0x01	; 1
+    1a9c:	61 e4       	ldi	r22, 0x41	; 65
+    1a9e:	70 e0       	ldi	r23, 0x00	; 0
     1aa0:	80 e0       	ldi	r24, 0x00	; 0
     1aa2:	90 e0       	ldi	r25, 0x00	; 0
     1aa4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1aa8:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1aac:	67 e2       	ldi	r22, 0x27	; 39
-    1aae:	71 e0       	ldi	r23, 0x01	; 1
+    1aac:	61 e4       	ldi	r22, 0x41	; 65
+    1aae:	70 e0       	ldi	r23, 0x00	; 0
     1ab0:	80 e0       	ldi	r24, 0x00	; 0
     1ab2:	90 e0       	ldi	r25, 0x00	; 0
     1ab4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1ab8:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1abc:	67 e2       	ldi	r22, 0x27	; 39
-    1abe:	71 e0       	ldi	r23, 0x01	; 1
+    1abc:	61 e4       	ldi	r22, 0x41	; 65
+    1abe:	70 e0       	ldi	r23, 0x00	; 0
     1ac0:	80 e0       	ldi	r24, 0x00	; 0
     1ac2:	90 e0       	ldi	r25, 0x00	; 0
     1ac4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1ac8:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1acc:	67 e2       	ldi	r22, 0x27	; 39
-    1ace:	71 e0       	ldi	r23, 0x01	; 1
+    1acc:	61 e4       	ldi	r22, 0x41	; 65
+    1ace:	70 e0       	ldi	r23, 0x00	; 0
     1ad0:	80 e0       	ldi	r24, 0x00	; 0
     1ad2:	90 e0       	ldi	r25, 0x00	; 0
     1ad4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1ad8:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1adc:	67 e2       	ldi	r22, 0x27	; 39
-    1ade:	71 e0       	ldi	r23, 0x01	; 1
+    1adc:	61 e4       	ldi	r22, 0x41	; 65
+    1ade:	70 e0       	ldi	r23, 0x00	; 0
     1ae0:	80 e0       	ldi	r24, 0x00	; 0
     1ae2:	90 e0       	ldi	r25, 0x00	; 0
     1ae4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     1ae8:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1aec:	67 e2       	ldi	r22, 0x27	; 39
-    1aee:	71 e0       	ldi	r23, 0x01	; 1
+    1aec:	61 e4       	ldi	r22, 0x41	; 65
+    1aee:	70 e0       	ldi	r23, 0x00	; 0
     1af0:	80 e0       	ldi	r24, 0x00	; 0
     1af2:	90 e0       	ldi	r25, 0x00	; 0
     1af4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -4999,8 +4999,8 @@ void loop() {
 	send_bit_0();
     1af8:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1afc:	67 e2       	ldi	r22, 0x27	; 39
-    1afe:	71 e0       	ldi	r23, 0x01	; 1
+    1afc:	61 e4       	ldi	r22, 0x41	; 65
+    1afe:	70 e0       	ldi	r23, 0x00	; 0
     1b00:	80 e0       	ldi	r24, 0x00	; 0
     1b02:	90 e0       	ldi	r25, 0x00	; 0
     1b04:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5009,64 +5009,64 @@ void loop() {
 	send_bit_0();
     1b08:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b0c:	67 e2       	ldi	r22, 0x27	; 39
-    1b0e:	71 e0       	ldi	r23, 0x01	; 1
+    1b0c:	61 e4       	ldi	r22, 0x41	; 65
+    1b0e:	70 e0       	ldi	r23, 0x00	; 0
     1b10:	80 e0       	ldi	r24, 0x00	; 0
     1b12:	90 e0       	ldi	r25, 0x00	; 0
     1b14:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b18:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b1c:	67 e2       	ldi	r22, 0x27	; 39
-    1b1e:	71 e0       	ldi	r23, 0x01	; 1
+    1b1c:	61 e4       	ldi	r22, 0x41	; 65
+    1b1e:	70 e0       	ldi	r23, 0x00	; 0
     1b20:	80 e0       	ldi	r24, 0x00	; 0
     1b22:	90 e0       	ldi	r25, 0x00	; 0
     1b24:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b28:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b2c:	67 e2       	ldi	r22, 0x27	; 39
-    1b2e:	71 e0       	ldi	r23, 0x01	; 1
+    1b2c:	61 e4       	ldi	r22, 0x41	; 65
+    1b2e:	70 e0       	ldi	r23, 0x00	; 0
     1b30:	80 e0       	ldi	r24, 0x00	; 0
     1b32:	90 e0       	ldi	r25, 0x00	; 0
     1b34:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b38:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b3c:	67 e2       	ldi	r22, 0x27	; 39
-    1b3e:	71 e0       	ldi	r23, 0x01	; 1
+    1b3c:	61 e4       	ldi	r22, 0x41	; 65
+    1b3e:	70 e0       	ldi	r23, 0x00	; 0
     1b40:	80 e0       	ldi	r24, 0x00	; 0
     1b42:	90 e0       	ldi	r25, 0x00	; 0
     1b44:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b48:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b4c:	67 e2       	ldi	r22, 0x27	; 39
-    1b4e:	71 e0       	ldi	r23, 0x01	; 1
+    1b4c:	61 e4       	ldi	r22, 0x41	; 65
+    1b4e:	70 e0       	ldi	r23, 0x00	; 0
     1b50:	80 e0       	ldi	r24, 0x00	; 0
     1b52:	90 e0       	ldi	r25, 0x00	; 0
     1b54:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b58:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b5c:	67 e2       	ldi	r22, 0x27	; 39
-    1b5e:	71 e0       	ldi	r23, 0x01	; 1
+    1b5c:	61 e4       	ldi	r22, 0x41	; 65
+    1b5e:	70 e0       	ldi	r23, 0x00	; 0
     1b60:	80 e0       	ldi	r24, 0x00	; 0
     1b62:	90 e0       	ldi	r25, 0x00	; 0
     1b64:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     1b68:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1b6c:	67 e2       	ldi	r22, 0x27	; 39
-    1b6e:	71 e0       	ldi	r23, 0x01	; 1
+    1b6c:	61 e4       	ldi	r22, 0x41	; 65
+    1b6e:	70 e0       	ldi	r23, 0x00	; 0
     1b70:	80 e0       	ldi	r24, 0x00	; 0
     1b72:	90 e0       	ldi	r25, 0x00	; 0
     1b74:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1b78:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b7c:	67 e2       	ldi	r22, 0x27	; 39
-    1b7e:	71 e0       	ldi	r23, 0x01	; 1
+    1b7c:	61 e4       	ldi	r22, 0x41	; 65
+    1b7e:	70 e0       	ldi	r23, 0x00	; 0
     1b80:	80 e0       	ldi	r24, 0x00	; 0
     1b82:	90 e0       	ldi	r25, 0x00	; 0
     1b84:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5074,8 +5074,8 @@ void loop() {
 	send_bit_0();
     1b88:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1b8c:	67 e2       	ldi	r22, 0x27	; 39
-    1b8e:	71 e0       	ldi	r23, 0x01	; 1
+    1b8c:	61 e4       	ldi	r22, 0x41	; 65
+    1b8e:	70 e0       	ldi	r23, 0x00	; 0
     1b90:	80 e0       	ldi	r24, 0x00	; 0
     1b92:	90 e0       	ldi	r25, 0x00	; 0
     1b94:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5093,8 +5093,8 @@ void loop() {
 	send_bit_1();
     1ba4:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1ba8:	67 e2       	ldi	r22, 0x27	; 39
-    1baa:	71 e0       	ldi	r23, 0x01	; 1
+    1ba8:	61 e4       	ldi	r22, 0x41	; 65
+    1baa:	70 e0       	ldi	r23, 0x00	; 0
     1bac:	80 e0       	ldi	r24, 0x00	; 0
     1bae:	90 e0       	ldi	r25, 0x00	; 0
     1bb0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5103,32 +5103,32 @@ void loop() {
 	send_bit_0();
     1bb4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1bb8:	67 e2       	ldi	r22, 0x27	; 39
-    1bba:	71 e0       	ldi	r23, 0x01	; 1
+    1bb8:	61 e4       	ldi	r22, 0x41	; 65
+    1bba:	70 e0       	ldi	r23, 0x00	; 0
     1bbc:	80 e0       	ldi	r24, 0x00	; 0
     1bbe:	90 e0       	ldi	r25, 0x00	; 0
     1bc0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1bc4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1bc8:	67 e2       	ldi	r22, 0x27	; 39
-    1bca:	71 e0       	ldi	r23, 0x01	; 1
+    1bc8:	61 e4       	ldi	r22, 0x41	; 65
+    1bca:	70 e0       	ldi	r23, 0x00	; 0
     1bcc:	80 e0       	ldi	r24, 0x00	; 0
     1bce:	90 e0       	ldi	r25, 0x00	; 0
     1bd0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1bd4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1bd8:	67 e2       	ldi	r22, 0x27	; 39
-    1bda:	71 e0       	ldi	r23, 0x01	; 1
+    1bd8:	61 e4       	ldi	r22, 0x41	; 65
+    1bda:	70 e0       	ldi	r23, 0x00	; 0
     1bdc:	80 e0       	ldi	r24, 0x00	; 0
     1bde:	90 e0       	ldi	r25, 0x00	; 0
     1be0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1be4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1be8:	67 e2       	ldi	r22, 0x27	; 39
-    1bea:	71 e0       	ldi	r23, 0x01	; 1
+    1be8:	61 e4       	ldi	r22, 0x41	; 65
+    1bea:	70 e0       	ldi	r23, 0x00	; 0
     1bec:	80 e0       	ldi	r24, 0x00	; 0
     1bee:	90 e0       	ldi	r25, 0x00	; 0
     1bf0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5136,8 +5136,8 @@ void loop() {
 	send_bit_1();
     1bf4:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1bf8:	67 e2       	ldi	r22, 0x27	; 39
-    1bfa:	71 e0       	ldi	r23, 0x01	; 1
+    1bf8:	61 e4       	ldi	r22, 0x41	; 65
+    1bfa:	70 e0       	ldi	r23, 0x00	; 0
     1bfc:	80 e0       	ldi	r24, 0x00	; 0
     1bfe:	90 e0       	ldi	r25, 0x00	; 0
     1c00:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5146,64 +5146,64 @@ void loop() {
 	send_bit_0();
     1c04:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c08:	67 e2       	ldi	r22, 0x27	; 39
-    1c0a:	71 e0       	ldi	r23, 0x01	; 1
+    1c08:	61 e4       	ldi	r22, 0x41	; 65
+    1c0a:	70 e0       	ldi	r23, 0x00	; 0
     1c0c:	80 e0       	ldi	r24, 0x00	; 0
     1c0e:	90 e0       	ldi	r25, 0x00	; 0
     1c10:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c14:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c18:	67 e2       	ldi	r22, 0x27	; 39
-    1c1a:	71 e0       	ldi	r23, 0x01	; 1
+    1c18:	61 e4       	ldi	r22, 0x41	; 65
+    1c1a:	70 e0       	ldi	r23, 0x00	; 0
     1c1c:	80 e0       	ldi	r24, 0x00	; 0
     1c1e:	90 e0       	ldi	r25, 0x00	; 0
     1c20:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c24:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c28:	67 e2       	ldi	r22, 0x27	; 39
-    1c2a:	71 e0       	ldi	r23, 0x01	; 1
+    1c28:	61 e4       	ldi	r22, 0x41	; 65
+    1c2a:	70 e0       	ldi	r23, 0x00	; 0
     1c2c:	80 e0       	ldi	r24, 0x00	; 0
     1c2e:	90 e0       	ldi	r25, 0x00	; 0
     1c30:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c34:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c38:	67 e2       	ldi	r22, 0x27	; 39
-    1c3a:	71 e0       	ldi	r23, 0x01	; 1
+    1c38:	61 e4       	ldi	r22, 0x41	; 65
+    1c3a:	70 e0       	ldi	r23, 0x00	; 0
     1c3c:	80 e0       	ldi	r24, 0x00	; 0
     1c3e:	90 e0       	ldi	r25, 0x00	; 0
     1c40:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c44:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c48:	67 e2       	ldi	r22, 0x27	; 39
-    1c4a:	71 e0       	ldi	r23, 0x01	; 1
+    1c48:	61 e4       	ldi	r22, 0x41	; 65
+    1c4a:	70 e0       	ldi	r23, 0x00	; 0
     1c4c:	80 e0       	ldi	r24, 0x00	; 0
     1c4e:	90 e0       	ldi	r25, 0x00	; 0
     1c50:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c54:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c58:	67 e2       	ldi	r22, 0x27	; 39
-    1c5a:	71 e0       	ldi	r23, 0x01	; 1
+    1c58:	61 e4       	ldi	r22, 0x41	; 65
+    1c5a:	70 e0       	ldi	r23, 0x00	; 0
     1c5c:	80 e0       	ldi	r24, 0x00	; 0
     1c5e:	90 e0       	ldi	r25, 0x00	; 0
     1c60:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1c64:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c68:	67 e2       	ldi	r22, 0x27	; 39
-    1c6a:	71 e0       	ldi	r23, 0x01	; 1
+    1c68:	61 e4       	ldi	r22, 0x41	; 65
+    1c6a:	70 e0       	ldi	r23, 0x00	; 0
     1c6c:	80 e0       	ldi	r24, 0x00	; 0
     1c6e:	90 e0       	ldi	r25, 0x00	; 0
     1c70:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     1c74:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1c78:	67 e2       	ldi	r22, 0x27	; 39
-    1c7a:	71 e0       	ldi	r23, 0x01	; 1
+    1c78:	61 e4       	ldi	r22, 0x41	; 65
+    1c7a:	70 e0       	ldi	r23, 0x00	; 0
     1c7c:	80 e0       	ldi	r24, 0x00	; 0
     1c7e:	90 e0       	ldi	r25, 0x00	; 0
     1c80:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5211,8 +5211,8 @@ void loop() {
 	send_bit_0();
     1c84:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c88:	67 e2       	ldi	r22, 0x27	; 39
-    1c8a:	71 e0       	ldi	r23, 0x01	; 1
+    1c88:	61 e4       	ldi	r22, 0x41	; 65
+    1c8a:	70 e0       	ldi	r23, 0x00	; 0
     1c8c:	80 e0       	ldi	r24, 0x00	; 0
     1c8e:	90 e0       	ldi	r25, 0x00	; 0
     1c90:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5221,64 +5221,64 @@ void loop() {
 	send_bit_0();
     1c94:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1c98:	67 e2       	ldi	r22, 0x27	; 39
-    1c9a:	71 e0       	ldi	r23, 0x01	; 1
+    1c98:	61 e4       	ldi	r22, 0x41	; 65
+    1c9a:	70 e0       	ldi	r23, 0x00	; 0
     1c9c:	80 e0       	ldi	r24, 0x00	; 0
     1c9e:	90 e0       	ldi	r25, 0x00	; 0
     1ca0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1ca4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1ca8:	67 e2       	ldi	r22, 0x27	; 39
-    1caa:	71 e0       	ldi	r23, 0x01	; 1
+    1ca8:	61 e4       	ldi	r22, 0x41	; 65
+    1caa:	70 e0       	ldi	r23, 0x00	; 0
     1cac:	80 e0       	ldi	r24, 0x00	; 0
     1cae:	90 e0       	ldi	r25, 0x00	; 0
     1cb0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1cb4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1cb8:	67 e2       	ldi	r22, 0x27	; 39
-    1cba:	71 e0       	ldi	r23, 0x01	; 1
+    1cb8:	61 e4       	ldi	r22, 0x41	; 65
+    1cba:	70 e0       	ldi	r23, 0x00	; 0
     1cbc:	80 e0       	ldi	r24, 0x00	; 0
     1cbe:	90 e0       	ldi	r25, 0x00	; 0
     1cc0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1cc4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1cc8:	67 e2       	ldi	r22, 0x27	; 39
-    1cca:	71 e0       	ldi	r23, 0x01	; 1
+    1cc8:	61 e4       	ldi	r22, 0x41	; 65
+    1cca:	70 e0       	ldi	r23, 0x00	; 0
     1ccc:	80 e0       	ldi	r24, 0x00	; 0
     1cce:	90 e0       	ldi	r25, 0x00	; 0
     1cd0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1cd4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1cd8:	67 e2       	ldi	r22, 0x27	; 39
-    1cda:	71 e0       	ldi	r23, 0x01	; 1
+    1cd8:	61 e4       	ldi	r22, 0x41	; 65
+    1cda:	70 e0       	ldi	r23, 0x00	; 0
     1cdc:	80 e0       	ldi	r24, 0x00	; 0
     1cde:	90 e0       	ldi	r25, 0x00	; 0
     1ce0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1ce4:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1ce8:	67 e2       	ldi	r22, 0x27	; 39
-    1cea:	71 e0       	ldi	r23, 0x01	; 1
+    1ce8:	61 e4       	ldi	r22, 0x41	; 65
+    1cea:	70 e0       	ldi	r23, 0x00	; 0
     1cec:	80 e0       	ldi	r24, 0x00	; 0
     1cee:	90 e0       	ldi	r25, 0x00	; 0
     1cf0:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_1();
     1cf4:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 	delay(WAITING_TIME);
-    1cf8:	67 e2       	ldi	r22, 0x27	; 39
-    1cfa:	71 e0       	ldi	r23, 0x01	; 1
+    1cf8:	61 e4       	ldi	r22, 0x41	; 65
+    1cfa:	70 e0       	ldi	r23, 0x00	; 0
     1cfc:	80 e0       	ldi	r24, 0x00	; 0
     1cfe:	90 e0       	ldi	r25, 0x00	; 0
     1d00:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 	send_bit_0();
     1d04:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1d08:	67 e2       	ldi	r22, 0x27	; 39
-    1d0a:	71 e0       	ldi	r23, 0x01	; 1
+    1d08:	61 e4       	ldi	r22, 0x41	; 65
+    1d0a:	70 e0       	ldi	r23, 0x00	; 0
     1d0c:	80 e0       	ldi	r24, 0x00	; 0
     1d0e:	90 e0       	ldi	r25, 0x00	; 0
     1d10:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5286,8 +5286,8 @@ void loop() {
 	send_bit_0();
     1d14:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 	delay(WAITING_TIME);
-    1d18:	67 e2       	ldi	r22, 0x27	; 39
-    1d1a:	71 e0       	ldi	r23, 0x01	; 1
+    1d18:	61 e4       	ldi	r22, 0x41	; 65
+    1d1a:	70 e0       	ldi	r23, 0x00	; 0
     1d1c:	80 e0       	ldi	r24, 0x00	; 0
     1d1e:	90 e0       	ldi	r25, 0x00	; 0
     1d20:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5304,8 +5304,8 @@ void loop() {
 		send_bit_1();
     1d30:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1d34:	67 e2       	ldi	r22, 0x27	; 39
-    1d36:	71 e0       	ldi	r23, 0x01	; 1
+    1d34:	61 e4       	ldi	r22, 0x41	; 65
+    1d36:	70 e0       	ldi	r23, 0x00	; 0
     1d38:	80 e0       	ldi	r24, 0x00	; 0
     1d3a:	90 e0       	ldi	r25, 0x00	; 0
     1d3c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5314,32 +5314,32 @@ void loop() {
 		send_bit_0();
     1d40:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1d44:	67 e2       	ldi	r22, 0x27	; 39
-    1d46:	71 e0       	ldi	r23, 0x01	; 1
+    1d44:	61 e4       	ldi	r22, 0x41	; 65
+    1d46:	70 e0       	ldi	r23, 0x00	; 0
     1d48:	80 e0       	ldi	r24, 0x00	; 0
     1d4a:	90 e0       	ldi	r25, 0x00	; 0
     1d4c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1d50:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1d54:	67 e2       	ldi	r22, 0x27	; 39
-    1d56:	71 e0       	ldi	r23, 0x01	; 1
+    1d54:	61 e4       	ldi	r22, 0x41	; 65
+    1d56:	70 e0       	ldi	r23, 0x00	; 0
     1d58:	80 e0       	ldi	r24, 0x00	; 0
     1d5a:	90 e0       	ldi	r25, 0x00	; 0
     1d5c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1d60:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1d64:	67 e2       	ldi	r22, 0x27	; 39
-    1d66:	71 e0       	ldi	r23, 0x01	; 1
+    1d64:	61 e4       	ldi	r22, 0x41	; 65
+    1d66:	70 e0       	ldi	r23, 0x00	; 0
     1d68:	80 e0       	ldi	r24, 0x00	; 0
     1d6a:	90 e0       	ldi	r25, 0x00	; 0
     1d6c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1d70:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1d74:	67 e2       	ldi	r22, 0x27	; 39
-    1d76:	71 e0       	ldi	r23, 0x01	; 1
+    1d74:	61 e4       	ldi	r22, 0x41	; 65
+    1d76:	70 e0       	ldi	r23, 0x00	; 0
     1d78:	80 e0       	ldi	r24, 0x00	; 0
     1d7a:	90 e0       	ldi	r25, 0x00	; 0
     1d7c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5347,8 +5347,8 @@ void loop() {
 		send_bit_0();
     1d80:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1d84:	67 e2       	ldi	r22, 0x27	; 39
-    1d86:	71 e0       	ldi	r23, 0x01	; 1
+    1d84:	61 e4       	ldi	r22, 0x41	; 65
+    1d86:	70 e0       	ldi	r23, 0x00	; 0
     1d88:	80 e0       	ldi	r24, 0x00	; 0
     1d8a:	90 e0       	ldi	r25, 0x00	; 0
     1d8c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5359,64 +5359,64 @@ void loop() {
 		send_bit_0();
     1d90:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1d94:	67 e2       	ldi	r22, 0x27	; 39
-    1d96:	71 e0       	ldi	r23, 0x01	; 1
+    1d94:	61 e4       	ldi	r22, 0x41	; 65
+    1d96:	70 e0       	ldi	r23, 0x00	; 0
     1d98:	80 e0       	ldi	r24, 0x00	; 0
     1d9a:	90 e0       	ldi	r25, 0x00	; 0
     1d9c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1da0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1da4:	67 e2       	ldi	r22, 0x27	; 39
-    1da6:	71 e0       	ldi	r23, 0x01	; 1
+    1da4:	61 e4       	ldi	r22, 0x41	; 65
+    1da6:	70 e0       	ldi	r23, 0x00	; 0
     1da8:	80 e0       	ldi	r24, 0x00	; 0
     1daa:	90 e0       	ldi	r25, 0x00	; 0
     1dac:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1db0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1db4:	67 e2       	ldi	r22, 0x27	; 39
-    1db6:	71 e0       	ldi	r23, 0x01	; 1
+    1db4:	61 e4       	ldi	r22, 0x41	; 65
+    1db6:	70 e0       	ldi	r23, 0x00	; 0
     1db8:	80 e0       	ldi	r24, 0x00	; 0
     1dba:	90 e0       	ldi	r25, 0x00	; 0
     1dbc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1dc0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1dc4:	67 e2       	ldi	r22, 0x27	; 39
-    1dc6:	71 e0       	ldi	r23, 0x01	; 1
+    1dc4:	61 e4       	ldi	r22, 0x41	; 65
+    1dc6:	70 e0       	ldi	r23, 0x00	; 0
     1dc8:	80 e0       	ldi	r24, 0x00	; 0
     1dca:	90 e0       	ldi	r25, 0x00	; 0
     1dcc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1dd0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1dd4:	67 e2       	ldi	r22, 0x27	; 39
-    1dd6:	71 e0       	ldi	r23, 0x01	; 1
+    1dd4:	61 e4       	ldi	r22, 0x41	; 65
+    1dd6:	70 e0       	ldi	r23, 0x00	; 0
     1dd8:	80 e0       	ldi	r24, 0x00	; 0
     1dda:	90 e0       	ldi	r25, 0x00	; 0
     1ddc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1de0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1de4:	67 e2       	ldi	r22, 0x27	; 39
-    1de6:	71 e0       	ldi	r23, 0x01	; 1
+    1de4:	61 e4       	ldi	r22, 0x41	; 65
+    1de6:	70 e0       	ldi	r23, 0x00	; 0
     1de8:	80 e0       	ldi	r24, 0x00	; 0
     1dea:	90 e0       	ldi	r25, 0x00	; 0
     1dec:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1df0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1df4:	67 e2       	ldi	r22, 0x27	; 39
-    1df6:	71 e0       	ldi	r23, 0x01	; 1
+    1df4:	61 e4       	ldi	r22, 0x41	; 65
+    1df6:	70 e0       	ldi	r23, 0x00	; 0
     1df8:	80 e0       	ldi	r24, 0x00	; 0
     1dfa:	90 e0       	ldi	r25, 0x00	; 0
     1dfc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1e00:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1e04:	67 e2       	ldi	r22, 0x27	; 39
-    1e06:	71 e0       	ldi	r23, 0x01	; 1
+    1e04:	61 e4       	ldi	r22, 0x41	; 65
+    1e06:	70 e0       	ldi	r23, 0x00	; 0
     1e08:	80 e0       	ldi	r24, 0x00	; 0
     1e0a:	90 e0       	ldi	r25, 0x00	; 0
     1e0c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5424,8 +5424,8 @@ void loop() {
 		send_bit_0();
     1e10:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e14:	67 e2       	ldi	r22, 0x27	; 39
-    1e16:	71 e0       	ldi	r23, 0x01	; 1
+    1e14:	61 e4       	ldi	r22, 0x41	; 65
+    1e16:	70 e0       	ldi	r23, 0x00	; 0
     1e18:	80 e0       	ldi	r24, 0x00	; 0
     1e1a:	90 e0       	ldi	r25, 0x00	; 0
     1e1c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5434,64 +5434,64 @@ void loop() {
 		send_bit_0();
     1e20:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e24:	67 e2       	ldi	r22, 0x27	; 39
-    1e26:	71 e0       	ldi	r23, 0x01	; 1
+    1e24:	61 e4       	ldi	r22, 0x41	; 65
+    1e26:	70 e0       	ldi	r23, 0x00	; 0
     1e28:	80 e0       	ldi	r24, 0x00	; 0
     1e2a:	90 e0       	ldi	r25, 0x00	; 0
     1e2c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e30:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e34:	67 e2       	ldi	r22, 0x27	; 39
-    1e36:	71 e0       	ldi	r23, 0x01	; 1
+    1e34:	61 e4       	ldi	r22, 0x41	; 65
+    1e36:	70 e0       	ldi	r23, 0x00	; 0
     1e38:	80 e0       	ldi	r24, 0x00	; 0
     1e3a:	90 e0       	ldi	r25, 0x00	; 0
     1e3c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e40:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e44:	67 e2       	ldi	r22, 0x27	; 39
-    1e46:	71 e0       	ldi	r23, 0x01	; 1
+    1e44:	61 e4       	ldi	r22, 0x41	; 65
+    1e46:	70 e0       	ldi	r23, 0x00	; 0
     1e48:	80 e0       	ldi	r24, 0x00	; 0
     1e4a:	90 e0       	ldi	r25, 0x00	; 0
     1e4c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e50:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e54:	67 e2       	ldi	r22, 0x27	; 39
-    1e56:	71 e0       	ldi	r23, 0x01	; 1
+    1e54:	61 e4       	ldi	r22, 0x41	; 65
+    1e56:	70 e0       	ldi	r23, 0x00	; 0
     1e58:	80 e0       	ldi	r24, 0x00	; 0
     1e5a:	90 e0       	ldi	r25, 0x00	; 0
     1e5c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e60:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e64:	67 e2       	ldi	r22, 0x27	; 39
-    1e66:	71 e0       	ldi	r23, 0x01	; 1
+    1e64:	61 e4       	ldi	r22, 0x41	; 65
+    1e66:	70 e0       	ldi	r23, 0x00	; 0
     1e68:	80 e0       	ldi	r24, 0x00	; 0
     1e6a:	90 e0       	ldi	r25, 0x00	; 0
     1e6c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e70:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e74:	67 e2       	ldi	r22, 0x27	; 39
-    1e76:	71 e0       	ldi	r23, 0x01	; 1
+    1e74:	61 e4       	ldi	r22, 0x41	; 65
+    1e76:	70 e0       	ldi	r23, 0x00	; 0
     1e78:	80 e0       	ldi	r24, 0x00	; 0
     1e7a:	90 e0       	ldi	r25, 0x00	; 0
     1e7c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1e80:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1e84:	67 e2       	ldi	r22, 0x27	; 39
-    1e86:	71 e0       	ldi	r23, 0x01	; 1
+    1e84:	61 e4       	ldi	r22, 0x41	; 65
+    1e86:	70 e0       	ldi	r23, 0x00	; 0
     1e88:	80 e0       	ldi	r24, 0x00	; 0
     1e8a:	90 e0       	ldi	r25, 0x00	; 0
     1e8c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1e90:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1e94:	67 e2       	ldi	r22, 0x27	; 39
-    1e96:	71 e0       	ldi	r23, 0x01	; 1
+    1e94:	61 e4       	ldi	r22, 0x41	; 65
+    1e96:	70 e0       	ldi	r23, 0x00	; 0
     1e98:	80 e0       	ldi	r24, 0x00	; 0
     1e9a:	90 e0       	ldi	r25, 0x00	; 0
     1e9c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5499,8 +5499,8 @@ void loop() {
 		send_bit_0();
     1ea0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1ea4:	67 e2       	ldi	r22, 0x27	; 39
-    1ea6:	71 e0       	ldi	r23, 0x01	; 1
+    1ea4:	61 e4       	ldi	r22, 0x41	; 65
+    1ea6:	70 e0       	ldi	r23, 0x00	; 0
     1ea8:	80 e0       	ldi	r24, 0x00	; 0
     1eaa:	90 e0       	ldi	r25, 0x00	; 0
     1eac:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5511,64 +5511,64 @@ void loop() {
 		send_bit_0();
     1eb0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1eb4:	67 e2       	ldi	r22, 0x27	; 39
-    1eb6:	71 e0       	ldi	r23, 0x01	; 1
+    1eb4:	61 e4       	ldi	r22, 0x41	; 65
+    1eb6:	70 e0       	ldi	r23, 0x00	; 0
     1eb8:	80 e0       	ldi	r24, 0x00	; 0
     1eba:	90 e0       	ldi	r25, 0x00	; 0
     1ebc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1ec0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1ec4:	67 e2       	ldi	r22, 0x27	; 39
-    1ec6:	71 e0       	ldi	r23, 0x01	; 1
+    1ec4:	61 e4       	ldi	r22, 0x41	; 65
+    1ec6:	70 e0       	ldi	r23, 0x00	; 0
     1ec8:	80 e0       	ldi	r24, 0x00	; 0
     1eca:	90 e0       	ldi	r25, 0x00	; 0
     1ecc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1ed0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1ed4:	67 e2       	ldi	r22, 0x27	; 39
-    1ed6:	71 e0       	ldi	r23, 0x01	; 1
+    1ed4:	61 e4       	ldi	r22, 0x41	; 65
+    1ed6:	70 e0       	ldi	r23, 0x00	; 0
     1ed8:	80 e0       	ldi	r24, 0x00	; 0
     1eda:	90 e0       	ldi	r25, 0x00	; 0
     1edc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1ee0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1ee4:	67 e2       	ldi	r22, 0x27	; 39
-    1ee6:	71 e0       	ldi	r23, 0x01	; 1
+    1ee4:	61 e4       	ldi	r22, 0x41	; 65
+    1ee6:	70 e0       	ldi	r23, 0x00	; 0
     1ee8:	80 e0       	ldi	r24, 0x00	; 0
     1eea:	90 e0       	ldi	r25, 0x00	; 0
     1eec:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1ef0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1ef4:	67 e2       	ldi	r22, 0x27	; 39
-    1ef6:	71 e0       	ldi	r23, 0x01	; 1
+    1ef4:	61 e4       	ldi	r22, 0x41	; 65
+    1ef6:	70 e0       	ldi	r23, 0x00	; 0
     1ef8:	80 e0       	ldi	r24, 0x00	; 0
     1efa:	90 e0       	ldi	r25, 0x00	; 0
     1efc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f00:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f04:	67 e2       	ldi	r22, 0x27	; 39
-    1f06:	71 e0       	ldi	r23, 0x01	; 1
+    1f04:	61 e4       	ldi	r22, 0x41	; 65
+    1f06:	70 e0       	ldi	r23, 0x00	; 0
     1f08:	80 e0       	ldi	r24, 0x00	; 0
     1f0a:	90 e0       	ldi	r25, 0x00	; 0
     1f0c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1f10:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1f14:	67 e2       	ldi	r22, 0x27	; 39
-    1f16:	71 e0       	ldi	r23, 0x01	; 1
+    1f14:	61 e4       	ldi	r22, 0x41	; 65
+    1f16:	70 e0       	ldi	r23, 0x00	; 0
     1f18:	80 e0       	ldi	r24, 0x00	; 0
     1f1a:	90 e0       	ldi	r25, 0x00	; 0
     1f1c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1f20:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1f24:	67 e2       	ldi	r22, 0x27	; 39
-    1f26:	71 e0       	ldi	r23, 0x01	; 1
+    1f24:	61 e4       	ldi	r22, 0x41	; 65
+    1f26:	70 e0       	ldi	r23, 0x00	; 0
     1f28:	80 e0       	ldi	r24, 0x00	; 0
     1f2a:	90 e0       	ldi	r25, 0x00	; 0
     1f2c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5576,8 +5576,8 @@ void loop() {
 		send_bit_1();
     1f30:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1f34:	67 e2       	ldi	r22, 0x27	; 39
-    1f36:	71 e0       	ldi	r23, 0x01	; 1
+    1f34:	61 e4       	ldi	r22, 0x41	; 65
+    1f36:	70 e0       	ldi	r23, 0x00	; 0
     1f38:	80 e0       	ldi	r24, 0x00	; 0
     1f3a:	90 e0       	ldi	r25, 0x00	; 0
     1f3c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5586,64 +5586,64 @@ void loop() {
 		send_bit_0();
     1f40:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f44:	67 e2       	ldi	r22, 0x27	; 39
-    1f46:	71 e0       	ldi	r23, 0x01	; 1
+    1f44:	61 e4       	ldi	r22, 0x41	; 65
+    1f46:	70 e0       	ldi	r23, 0x00	; 0
     1f48:	80 e0       	ldi	r24, 0x00	; 0
     1f4a:	90 e0       	ldi	r25, 0x00	; 0
     1f4c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f50:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f54:	67 e2       	ldi	r22, 0x27	; 39
-    1f56:	71 e0       	ldi	r23, 0x01	; 1
+    1f54:	61 e4       	ldi	r22, 0x41	; 65
+    1f56:	70 e0       	ldi	r23, 0x00	; 0
     1f58:	80 e0       	ldi	r24, 0x00	; 0
     1f5a:	90 e0       	ldi	r25, 0x00	; 0
     1f5c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f60:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f64:	67 e2       	ldi	r22, 0x27	; 39
-    1f66:	71 e0       	ldi	r23, 0x01	; 1
+    1f64:	61 e4       	ldi	r22, 0x41	; 65
+    1f66:	70 e0       	ldi	r23, 0x00	; 0
     1f68:	80 e0       	ldi	r24, 0x00	; 0
     1f6a:	90 e0       	ldi	r25, 0x00	; 0
     1f6c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f70:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f74:	67 e2       	ldi	r22, 0x27	; 39
-    1f76:	71 e0       	ldi	r23, 0x01	; 1
+    1f74:	61 e4       	ldi	r22, 0x41	; 65
+    1f76:	70 e0       	ldi	r23, 0x00	; 0
     1f78:	80 e0       	ldi	r24, 0x00	; 0
     1f7a:	90 e0       	ldi	r25, 0x00	; 0
     1f7c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f80:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f84:	67 e2       	ldi	r22, 0x27	; 39
-    1f86:	71 e0       	ldi	r23, 0x01	; 1
+    1f84:	61 e4       	ldi	r22, 0x41	; 65
+    1f86:	70 e0       	ldi	r23, 0x00	; 0
     1f88:	80 e0       	ldi	r24, 0x00	; 0
     1f8a:	90 e0       	ldi	r25, 0x00	; 0
     1f8c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     1f90:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    1f94:	67 e2       	ldi	r22, 0x27	; 39
-    1f96:	71 e0       	ldi	r23, 0x01	; 1
+    1f94:	61 e4       	ldi	r22, 0x41	; 65
+    1f96:	70 e0       	ldi	r23, 0x00	; 0
     1f98:	80 e0       	ldi	r24, 0x00	; 0
     1f9a:	90 e0       	ldi	r25, 0x00	; 0
     1f9c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1fa0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1fa4:	67 e2       	ldi	r22, 0x27	; 39
-    1fa6:	71 e0       	ldi	r23, 0x01	; 1
+    1fa4:	61 e4       	ldi	r22, 0x41	; 65
+    1fa6:	70 e0       	ldi	r23, 0x00	; 0
     1fa8:	80 e0       	ldi	r24, 0x00	; 0
     1faa:	90 e0       	ldi	r25, 0x00	; 0
     1fac:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1fb0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1fb4:	67 e2       	ldi	r22, 0x27	; 39
-    1fb6:	71 e0       	ldi	r23, 0x01	; 1
+    1fb4:	61 e4       	ldi	r22, 0x41	; 65
+    1fb6:	70 e0       	ldi	r23, 0x00	; 0
     1fb8:	80 e0       	ldi	r24, 0x00	; 0
     1fba:	90 e0       	ldi	r25, 0x00	; 0
     1fbc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5651,8 +5651,8 @@ void loop() {
 		send_bit_1();
     1fc0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1fc4:	67 e2       	ldi	r22, 0x27	; 39
-    1fc6:	71 e0       	ldi	r23, 0x01	; 1
+    1fc4:	61 e4       	ldi	r22, 0x41	; 65
+    1fc6:	70 e0       	ldi	r23, 0x00	; 0
     1fc8:	80 e0       	ldi	r24, 0x00	; 0
     1fca:	90 e0       	ldi	r25, 0x00	; 0
     1fcc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5662,64 +5662,64 @@ void loop() {
 		send_bit_1();
     1fd0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1fd4:	67 e2       	ldi	r22, 0x27	; 39
-    1fd6:	71 e0       	ldi	r23, 0x01	; 1
+    1fd4:	61 e4       	ldi	r22, 0x41	; 65
+    1fd6:	70 e0       	ldi	r23, 0x00	; 0
     1fd8:	80 e0       	ldi	r24, 0x00	; 0
     1fda:	90 e0       	ldi	r25, 0x00	; 0
     1fdc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1fe0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1fe4:	67 e2       	ldi	r22, 0x27	; 39
-    1fe6:	71 e0       	ldi	r23, 0x01	; 1
+    1fe4:	61 e4       	ldi	r22, 0x41	; 65
+    1fe6:	70 e0       	ldi	r23, 0x00	; 0
     1fe8:	80 e0       	ldi	r24, 0x00	; 0
     1fea:	90 e0       	ldi	r25, 0x00	; 0
     1fec:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     1ff0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    1ff4:	67 e2       	ldi	r22, 0x27	; 39
-    1ff6:	71 e0       	ldi	r23, 0x01	; 1
+    1ff4:	61 e4       	ldi	r22, 0x41	; 65
+    1ff6:	70 e0       	ldi	r23, 0x00	; 0
     1ff8:	80 e0       	ldi	r24, 0x00	; 0
     1ffa:	90 e0       	ldi	r25, 0x00	; 0
     1ffc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     2000:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    2004:	67 e2       	ldi	r22, 0x27	; 39
-    2006:	71 e0       	ldi	r23, 0x01	; 1
+    2004:	61 e4       	ldi	r22, 0x41	; 65
+    2006:	70 e0       	ldi	r23, 0x00	; 0
     2008:	80 e0       	ldi	r24, 0x00	; 0
     200a:	90 e0       	ldi	r25, 0x00	; 0
     200c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     2010:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    2014:	67 e2       	ldi	r22, 0x27	; 39
-    2016:	71 e0       	ldi	r23, 0x01	; 1
+    2014:	61 e4       	ldi	r22, 0x41	; 65
+    2016:	70 e0       	ldi	r23, 0x00	; 0
     2018:	80 e0       	ldi	r24, 0x00	; 0
     201a:	90 e0       	ldi	r25, 0x00	; 0
     201c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     2020:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    2024:	67 e2       	ldi	r22, 0x27	; 39
-    2026:	71 e0       	ldi	r23, 0x01	; 1
+    2024:	61 e4       	ldi	r22, 0x41	; 65
+    2026:	70 e0       	ldi	r23, 0x00	; 0
     2028:	80 e0       	ldi	r24, 0x00	; 0
     202a:	90 e0       	ldi	r25, 0x00	; 0
     202c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     2030:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    2034:	67 e2       	ldi	r22, 0x27	; 39
-    2036:	71 e0       	ldi	r23, 0x01	; 1
+    2034:	61 e4       	ldi	r22, 0x41	; 65
+    2036:	70 e0       	ldi	r23, 0x00	; 0
     2038:	80 e0       	ldi	r24, 0x00	; 0
     203a:	90 e0       	ldi	r25, 0x00	; 0
     203c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     2040:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2044:	67 e2       	ldi	r22, 0x27	; 39
-    2046:	71 e0       	ldi	r23, 0x01	; 1
+    2044:	61 e4       	ldi	r22, 0x41	; 65
+    2046:	70 e0       	ldi	r23, 0x00	; 0
     2048:	80 e0       	ldi	r24, 0x00	; 0
     204a:	90 e0       	ldi	r25, 0x00	; 0
     204c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5727,8 +5727,8 @@ void loop() {
 		send_bit_0();
     2050:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2054:	67 e2       	ldi	r22, 0x27	; 39
-    2056:	71 e0       	ldi	r23, 0x01	; 1
+    2054:	61 e4       	ldi	r22, 0x41	; 65
+    2056:	70 e0       	ldi	r23, 0x00	; 0
     2058:	80 e0       	ldi	r24, 0x00	; 0
     205a:	90 e0       	ldi	r25, 0x00	; 0
     205c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5737,64 +5737,64 @@ void loop() {
 		send_bit_0();
     2060:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2064:	67 e2       	ldi	r22, 0x27	; 39
-    2066:	71 e0       	ldi	r23, 0x01	; 1
+    2064:	61 e4       	ldi	r22, 0x41	; 65
+    2066:	70 e0       	ldi	r23, 0x00	; 0
     2068:	80 e0       	ldi	r24, 0x00	; 0
     206a:	90 e0       	ldi	r25, 0x00	; 0
     206c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     2070:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2074:	67 e2       	ldi	r22, 0x27	; 39
-    2076:	71 e0       	ldi	r23, 0x01	; 1
+    2074:	61 e4       	ldi	r22, 0x41	; 65
+    2076:	70 e0       	ldi	r23, 0x00	; 0
     2078:	80 e0       	ldi	r24, 0x00	; 0
     207a:	90 e0       	ldi	r25, 0x00	; 0
     207c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     2080:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2084:	67 e2       	ldi	r22, 0x27	; 39
-    2086:	71 e0       	ldi	r23, 0x01	; 1
+    2084:	61 e4       	ldi	r22, 0x41	; 65
+    2086:	70 e0       	ldi	r23, 0x00	; 0
     2088:	80 e0       	ldi	r24, 0x00	; 0
     208a:	90 e0       	ldi	r25, 0x00	; 0
     208c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     2090:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    2094:	67 e2       	ldi	r22, 0x27	; 39
-    2096:	71 e0       	ldi	r23, 0x01	; 1
+    2094:	61 e4       	ldi	r22, 0x41	; 65
+    2096:	70 e0       	ldi	r23, 0x00	; 0
     2098:	80 e0       	ldi	r24, 0x00	; 0
     209a:	90 e0       	ldi	r25, 0x00	; 0
     209c:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_0();
     20a0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    20a4:	67 e2       	ldi	r22, 0x27	; 39
-    20a6:	71 e0       	ldi	r23, 0x01	; 1
+    20a4:	61 e4       	ldi	r22, 0x41	; 65
+    20a6:	70 e0       	ldi	r23, 0x00	; 0
     20a8:	80 e0       	ldi	r24, 0x00	; 0
     20aa:	90 e0       	ldi	r25, 0x00	; 0
     20ac:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     20b0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    20b4:	67 e2       	ldi	r22, 0x27	; 39
-    20b6:	71 e0       	ldi	r23, 0x01	; 1
+    20b4:	61 e4       	ldi	r22, 0x41	; 65
+    20b6:	70 e0       	ldi	r23, 0x00	; 0
     20b8:	80 e0       	ldi	r24, 0x00	; 0
     20ba:	90 e0       	ldi	r25, 0x00	; 0
     20bc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     20c0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    20c4:	67 e2       	ldi	r22, 0x27	; 39
-    20c6:	71 e0       	ldi	r23, 0x01	; 1
+    20c4:	61 e4       	ldi	r22, 0x41	; 65
+    20c6:	70 e0       	ldi	r23, 0x00	; 0
     20c8:	80 e0       	ldi	r24, 0x00	; 0
     20ca:	90 e0       	ldi	r25, 0x00	; 0
     20cc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 		send_bit_1();
     20d0:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
 		delay(WAITING_TIME);
-    20d4:	67 e2       	ldi	r22, 0x27	; 39
-    20d6:	71 e0       	ldi	r23, 0x01	; 1
+    20d4:	61 e4       	ldi	r22, 0x41	; 65
+    20d6:	70 e0       	ldi	r23, 0x00	; 0
     20d8:	80 e0       	ldi	r24, 0x00	; 0
     20da:	90 e0       	ldi	r25, 0x00	; 0
     20dc:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5802,8 +5802,8 @@ void loop() {
 		send_bit_0();
     20e0:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
 		delay(WAITING_TIME);
-    20e4:	67 e2       	ldi	r22, 0x27	; 39
-    20e6:	71 e0       	ldi	r23, 0x01	; 1
+    20e4:	61 e4       	ldi	r22, 0x41	; 65
+    20e6:	70 e0       	ldi	r23, 0x00	; 0
     20e8:	80 e0       	ldi	r24, 0x00	; 0
     20ea:	90 e0       	ldi	r25, 0x00	; 0
     20ec:	0e 94 94 03 	call	0x728	; 0x728 <delay>
@@ -5815,563 +5815,1078 @@ void loop() {
     20f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
 
 
+		//HEADER_START
+			send_bit_1();
+    20fc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2100:	61 e4       	ldi	r22, 0x41	; 65
+    2102:	70 e0       	ldi	r23, 0x00	; 0
+    2104:	80 e0       	ldi	r24, 0x00	; 0
+    2106:	90 e0       	ldi	r25, 0x00	; 0
+    2108:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+			//MSG_TYPE 2
+			send_bit_0();
+    210c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2110:	61 e4       	ldi	r22, 0x41	; 65
+    2112:	70 e0       	ldi	r23, 0x00	; 0
+    2114:	80 e0       	ldi	r24, 0x00	; 0
+    2116:	90 e0       	ldi	r25, 0x00	; 0
+    2118:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    211c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2120:	61 e4       	ldi	r22, 0x41	; 65
+    2122:	70 e0       	ldi	r23, 0x00	; 0
+    2124:	80 e0       	ldi	r24, 0x00	; 0
+    2126:	90 e0       	ldi	r25, 0x00	; 0
+    2128:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    212c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2130:	61 e4       	ldi	r22, 0x41	; 65
+    2132:	70 e0       	ldi	r23, 0x00	; 0
+    2134:	80 e0       	ldi	r24, 0x00	; 0
+    2136:	90 e0       	ldi	r25, 0x00	; 0
+    2138:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    213c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2140:	61 e4       	ldi	r22, 0x41	; 65
+    2142:	70 e0       	ldi	r23, 0x00	; 0
+    2144:	80 e0       	ldi	r24, 0x00	; 0
+    2146:	90 e0       	ldi	r25, 0x00	; 0
+    2148:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_0();
+    214c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2150:	61 e4       	ldi	r22, 0x41	; 65
+    2152:	70 e0       	ldi	r23, 0x00	; 0
+    2154:	80 e0       	ldi	r24, 0x00	; 0
+    2156:	90 e0       	ldi	r25, 0x00	; 0
+    2158:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+
+
+			//MAC_FROM
+			send_bit_1();
+    215c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2160:	61 e4       	ldi	r22, 0x41	; 65
+    2162:	70 e0       	ldi	r23, 0x00	; 0
+    2164:	80 e0       	ldi	r24, 0x00	; 0
+    2166:	90 e0       	ldi	r25, 0x00	; 0
+    2168:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    216c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2170:	61 e4       	ldi	r22, 0x41	; 65
+    2172:	70 e0       	ldi	r23, 0x00	; 0
+    2174:	80 e0       	ldi	r24, 0x00	; 0
+    2176:	90 e0       	ldi	r25, 0x00	; 0
+    2178:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    217c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2180:	61 e4       	ldi	r22, 0x41	; 65
+    2182:	70 e0       	ldi	r23, 0x00	; 0
+    2184:	80 e0       	ldi	r24, 0x00	; 0
+    2186:	90 e0       	ldi	r25, 0x00	; 0
+    2188:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    218c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2190:	61 e4       	ldi	r22, 0x41	; 65
+    2192:	70 e0       	ldi	r23, 0x00	; 0
+    2194:	80 e0       	ldi	r24, 0x00	; 0
+    2196:	90 e0       	ldi	r25, 0x00	; 0
+    2198:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    219c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    21a0:	61 e4       	ldi	r22, 0x41	; 65
+    21a2:	70 e0       	ldi	r23, 0x00	; 0
+    21a4:	80 e0       	ldi	r24, 0x00	; 0
+    21a6:	90 e0       	ldi	r25, 0x00	; 0
+    21a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    21ac:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    21b0:	61 e4       	ldi	r22, 0x41	; 65
+    21b2:	70 e0       	ldi	r23, 0x00	; 0
+    21b4:	80 e0       	ldi	r24, 0x00	; 0
+    21b6:	90 e0       	ldi	r25, 0x00	; 0
+    21b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    21bc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    21c0:	61 e4       	ldi	r22, 0x41	; 65
+    21c2:	70 e0       	ldi	r23, 0x00	; 0
+    21c4:	80 e0       	ldi	r24, 0x00	; 0
+    21c6:	90 e0       	ldi	r25, 0x00	; 0
+    21c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    21cc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    21d0:	61 e4       	ldi	r22, 0x41	; 65
+    21d2:	70 e0       	ldi	r23, 0x00	; 0
+    21d4:	80 e0       	ldi	r24, 0x00	; 0
+    21d6:	90 e0       	ldi	r25, 0x00	; 0
+    21d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_0();
+    21dc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    21e0:	61 e4       	ldi	r22, 0x41	; 65
+    21e2:	70 e0       	ldi	r23, 0x00	; 0
+    21e4:	80 e0       	ldi	r24, 0x00	; 0
+    21e6:	90 e0       	ldi	r25, 0x00	; 0
+    21e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+			//MAC_TO
+			send_bit_0();
+    21ec:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    21f0:	61 e4       	ldi	r22, 0x41	; 65
+    21f2:	70 e0       	ldi	r23, 0x00	; 0
+    21f4:	80 e0       	ldi	r24, 0x00	; 0
+    21f6:	90 e0       	ldi	r25, 0x00	; 0
+    21f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    21fc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2200:	61 e4       	ldi	r22, 0x41	; 65
+    2202:	70 e0       	ldi	r23, 0x00	; 0
+    2204:	80 e0       	ldi	r24, 0x00	; 0
+    2206:	90 e0       	ldi	r25, 0x00	; 0
+    2208:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    220c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2210:	61 e4       	ldi	r22, 0x41	; 65
+    2212:	70 e0       	ldi	r23, 0x00	; 0
+    2214:	80 e0       	ldi	r24, 0x00	; 0
+    2216:	90 e0       	ldi	r25, 0x00	; 0
+    2218:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    221c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2220:	61 e4       	ldi	r22, 0x41	; 65
+    2222:	70 e0       	ldi	r23, 0x00	; 0
+    2224:	80 e0       	ldi	r24, 0x00	; 0
+    2226:	90 e0       	ldi	r25, 0x00	; 0
+    2228:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    222c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2230:	61 e4       	ldi	r22, 0x41	; 65
+    2232:	70 e0       	ldi	r23, 0x00	; 0
+    2234:	80 e0       	ldi	r24, 0x00	; 0
+    2236:	90 e0       	ldi	r25, 0x00	; 0
+    2238:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    223c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2240:	61 e4       	ldi	r22, 0x41	; 65
+    2242:	70 e0       	ldi	r23, 0x00	; 0
+    2244:	80 e0       	ldi	r24, 0x00	; 0
+    2246:	90 e0       	ldi	r25, 0x00	; 0
+    2248:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    224c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2250:	61 e4       	ldi	r22, 0x41	; 65
+    2252:	70 e0       	ldi	r23, 0x00	; 0
+    2254:	80 e0       	ldi	r24, 0x00	; 0
+    2256:	90 e0       	ldi	r25, 0x00	; 0
+    2258:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    225c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2260:	61 e4       	ldi	r22, 0x41	; 65
+    2262:	70 e0       	ldi	r23, 0x00	; 0
+    2264:	80 e0       	ldi	r24, 0x00	; 0
+    2266:	90 e0       	ldi	r25, 0x00	; 0
+    2268:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_1();
+    226c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2270:	61 e4       	ldi	r22, 0x41	; 65
+    2272:	70 e0       	ldi	r23, 0x00	; 0
+    2274:	80 e0       	ldi	r24, 0x00	; 0
+    2276:	90 e0       	ldi	r25, 0x00	; 0
+    2278:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+
+			//DATA_SIZE 3 bytes
+
+			send_bit_0();
+    227c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2280:	61 e4       	ldi	r22, 0x41	; 65
+    2282:	70 e0       	ldi	r23, 0x00	; 0
+    2284:	80 e0       	ldi	r24, 0x00	; 0
+    2286:	90 e0       	ldi	r25, 0x00	; 0
+    2288:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    228c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2290:	61 e4       	ldi	r22, 0x41	; 65
+    2292:	70 e0       	ldi	r23, 0x00	; 0
+    2294:	80 e0       	ldi	r24, 0x00	; 0
+    2296:	90 e0       	ldi	r25, 0x00	; 0
+    2298:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    229c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    22a0:	61 e4       	ldi	r22, 0x41	; 65
+    22a2:	70 e0       	ldi	r23, 0x00	; 0
+    22a4:	80 e0       	ldi	r24, 0x00	; 0
+    22a6:	90 e0       	ldi	r25, 0x00	; 0
+    22a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    22ac:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    22b0:	61 e4       	ldi	r22, 0x41	; 65
+    22b2:	70 e0       	ldi	r23, 0x00	; 0
+    22b4:	80 e0       	ldi	r24, 0x00	; 0
+    22b6:	90 e0       	ldi	r25, 0x00	; 0
+    22b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    22bc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    22c0:	61 e4       	ldi	r22, 0x41	; 65
+    22c2:	70 e0       	ldi	r23, 0x00	; 0
+    22c4:	80 e0       	ldi	r24, 0x00	; 0
+    22c6:	90 e0       	ldi	r25, 0x00	; 0
+    22c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    22cc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    22d0:	61 e4       	ldi	r22, 0x41	; 65
+    22d2:	70 e0       	ldi	r23, 0x00	; 0
+    22d4:	80 e0       	ldi	r24, 0x00	; 0
+    22d6:	90 e0       	ldi	r25, 0x00	; 0
+    22d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    22dc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    22e0:	61 e4       	ldi	r22, 0x41	; 65
+    22e2:	70 e0       	ldi	r23, 0x00	; 0
+    22e4:	80 e0       	ldi	r24, 0x00	; 0
+    22e6:	90 e0       	ldi	r25, 0x00	; 0
+    22e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    22ec:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    22f0:	61 e4       	ldi	r22, 0x41	; 65
+    22f2:	70 e0       	ldi	r23, 0x00	; 0
+    22f4:	80 e0       	ldi	r24, 0x00	; 0
+    22f6:	90 e0       	ldi	r25, 0x00	; 0
+    22f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_1();
+    22fc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2300:	61 e4       	ldi	r22, 0x41	; 65
+    2302:	70 e0       	ldi	r23, 0x00	; 0
+    2304:	80 e0       	ldi	r24, 0x00	; 0
+    2306:	90 e0       	ldi	r25, 0x00	; 0
+    2308:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+			//DATA 1st byte
+			send_bit_0();
+    230c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2310:	61 e4       	ldi	r22, 0x41	; 65
+    2312:	70 e0       	ldi	r23, 0x00	; 0
+    2314:	80 e0       	ldi	r24, 0x00	; 0
+    2316:	90 e0       	ldi	r25, 0x00	; 0
+    2318:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    231c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2320:	61 e4       	ldi	r22, 0x41	; 65
+    2322:	70 e0       	ldi	r23, 0x00	; 0
+    2324:	80 e0       	ldi	r24, 0x00	; 0
+    2326:	90 e0       	ldi	r25, 0x00	; 0
+    2328:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    232c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2330:	61 e4       	ldi	r22, 0x41	; 65
+    2332:	70 e0       	ldi	r23, 0x00	; 0
+    2334:	80 e0       	ldi	r24, 0x00	; 0
+    2336:	90 e0       	ldi	r25, 0x00	; 0
+    2338:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    233c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2340:	61 e4       	ldi	r22, 0x41	; 65
+    2342:	70 e0       	ldi	r23, 0x00	; 0
+    2344:	80 e0       	ldi	r24, 0x00	; 0
+    2346:	90 e0       	ldi	r25, 0x00	; 0
+    2348:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    234c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2350:	61 e4       	ldi	r22, 0x41	; 65
+    2352:	70 e0       	ldi	r23, 0x00	; 0
+    2354:	80 e0       	ldi	r24, 0x00	; 0
+    2356:	90 e0       	ldi	r25, 0x00	; 0
+    2358:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    235c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2360:	61 e4       	ldi	r22, 0x41	; 65
+    2362:	70 e0       	ldi	r23, 0x00	; 0
+    2364:	80 e0       	ldi	r24, 0x00	; 0
+    2366:	90 e0       	ldi	r25, 0x00	; 0
+    2368:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    236c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2370:	61 e4       	ldi	r22, 0x41	; 65
+    2372:	70 e0       	ldi	r23, 0x00	; 0
+    2374:	80 e0       	ldi	r24, 0x00	; 0
+    2376:	90 e0       	ldi	r25, 0x00	; 0
+    2378:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    237c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2380:	61 e4       	ldi	r22, 0x41	; 65
+    2382:	70 e0       	ldi	r23, 0x00	; 0
+    2384:	80 e0       	ldi	r24, 0x00	; 0
+    2386:	90 e0       	ldi	r25, 0x00	; 0
+    2388:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_1();
+    238c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2390:	61 e4       	ldi	r22, 0x41	; 65
+    2392:	70 e0       	ldi	r23, 0x00	; 0
+    2394:	80 e0       	ldi	r24, 0x00	; 0
+    2396:	90 e0       	ldi	r25, 0x00	; 0
+    2398:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+
+			//DATA 2nd byte
+			send_bit_0();
+    239c:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    23a0:	61 e4       	ldi	r22, 0x41	; 65
+    23a2:	70 e0       	ldi	r23, 0x00	; 0
+    23a4:	80 e0       	ldi	r24, 0x00	; 0
+    23a6:	90 e0       	ldi	r25, 0x00	; 0
+    23a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    23ac:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    23b0:	61 e4       	ldi	r22, 0x41	; 65
+    23b2:	70 e0       	ldi	r23, 0x00	; 0
+    23b4:	80 e0       	ldi	r24, 0x00	; 0
+    23b6:	90 e0       	ldi	r25, 0x00	; 0
+    23b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    23bc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    23c0:	61 e4       	ldi	r22, 0x41	; 65
+    23c2:	70 e0       	ldi	r23, 0x00	; 0
+    23c4:	80 e0       	ldi	r24, 0x00	; 0
+    23c6:	90 e0       	ldi	r25, 0x00	; 0
+    23c8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    23cc:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    23d0:	61 e4       	ldi	r22, 0x41	; 65
+    23d2:	70 e0       	ldi	r23, 0x00	; 0
+    23d4:	80 e0       	ldi	r24, 0x00	; 0
+    23d6:	90 e0       	ldi	r25, 0x00	; 0
+    23d8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    23dc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    23e0:	61 e4       	ldi	r22, 0x41	; 65
+    23e2:	70 e0       	ldi	r23, 0x00	; 0
+    23e4:	80 e0       	ldi	r24, 0x00	; 0
+    23e6:	90 e0       	ldi	r25, 0x00	; 0
+    23e8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    23ec:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    23f0:	61 e4       	ldi	r22, 0x41	; 65
+    23f2:	70 e0       	ldi	r23, 0x00	; 0
+    23f4:	80 e0       	ldi	r24, 0x00	; 0
+    23f6:	90 e0       	ldi	r25, 0x00	; 0
+    23f8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_0();
+    23fc:	0e 94 4a 0b 	call	0x1694	; 0x1694 <_Z10send_bit_0v>
+			delay(WAITING_TIME);
+    2400:	61 e4       	ldi	r22, 0x41	; 65
+    2402:	70 e0       	ldi	r23, 0x00	; 0
+    2404:	80 e0       	ldi	r24, 0x00	; 0
+    2406:	90 e0       	ldi	r25, 0x00	; 0
+    2408:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    240c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2410:	61 e4       	ldi	r22, 0x41	; 65
+    2412:	70 e0       	ldi	r23, 0x00	; 0
+    2414:	80 e0       	ldi	r24, 0x00	; 0
+    2416:	90 e0       	ldi	r25, 0x00	; 0
+    2418:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_1();
+    241c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2420:	61 e4       	ldi	r22, 0x41	; 65
+    2422:	70 e0       	ldi	r23, 0x00	; 0
+    2424:	80 e0       	ldi	r24, 0x00	; 0
+    2426:	90 e0       	ldi	r25, 0x00	; 0
+    2428:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+			//DATA 3rd byte
+			send_bit_1();
+    242c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2430:	61 e4       	ldi	r22, 0x41	; 65
+    2432:	70 e0       	ldi	r23, 0x00	; 0
+    2434:	80 e0       	ldi	r24, 0x00	; 0
+    2436:	90 e0       	ldi	r25, 0x00	; 0
+    2438:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    243c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2440:	61 e4       	ldi	r22, 0x41	; 65
+    2442:	70 e0       	ldi	r23, 0x00	; 0
+    2444:	80 e0       	ldi	r24, 0x00	; 0
+    2446:	90 e0       	ldi	r25, 0x00	; 0
+    2448:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    244c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2450:	61 e4       	ldi	r22, 0x41	; 65
+    2452:	70 e0       	ldi	r23, 0x00	; 0
+    2454:	80 e0       	ldi	r24, 0x00	; 0
+    2456:	90 e0       	ldi	r25, 0x00	; 0
+    2458:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    245c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2460:	61 e4       	ldi	r22, 0x41	; 65
+    2462:	70 e0       	ldi	r23, 0x00	; 0
+    2464:	80 e0       	ldi	r24, 0x00	; 0
+    2466:	90 e0       	ldi	r25, 0x00	; 0
+    2468:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    246c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2470:	61 e4       	ldi	r22, 0x41	; 65
+    2472:	70 e0       	ldi	r23, 0x00	; 0
+    2474:	80 e0       	ldi	r24, 0x00	; 0
+    2476:	90 e0       	ldi	r25, 0x00	; 0
+    2478:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    247c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2480:	61 e4       	ldi	r22, 0x41	; 65
+    2482:	70 e0       	ldi	r23, 0x00	; 0
+    2484:	80 e0       	ldi	r24, 0x00	; 0
+    2486:	90 e0       	ldi	r25, 0x00	; 0
+    2488:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    248c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    2490:	61 e4       	ldi	r22, 0x41	; 65
+    2492:	70 e0       	ldi	r23, 0x00	; 0
+    2494:	80 e0       	ldi	r24, 0x00	; 0
+    2496:	90 e0       	ldi	r25, 0x00	; 0
+    2498:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			send_bit_1();
+    249c:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    24a0:	61 e4       	ldi	r22, 0x41	; 65
+    24a2:	70 e0       	ldi	r23, 0x00	; 0
+    24a4:	80 e0       	ldi	r24, 0x00	; 0
+    24a6:	90 e0       	ldi	r25, 0x00	; 0
+    24a8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			//Parity_BIT
+			send_bit_1();
+    24ac:	0e 94 51 0b 	call	0x16a2	; 0x16a2 <_Z10send_bit_1v>
+			delay(WAITING_TIME);
+    24b0:	61 e4       	ldi	r22, 0x41	; 65
+    24b2:	70 e0       	ldi	r23, 0x00	; 0
+    24b4:	80 e0       	ldi	r24, 0x00	; 0
+    24b6:	90 e0       	ldi	r25, 0x00	; 0
+    24b8:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+			delay(10000);
+    24bc:	60 e1       	ldi	r22, 0x10	; 16
+    24be:	77 e2       	ldi	r23, 0x27	; 39
+    24c0:	80 e0       	ldi	r24, 0x00	; 0
+    24c2:	90 e0       	ldi	r25, 0x00	; 0
+    24c4:	0e 94 94 03 	call	0x728	; 0x728 <delay>
+
+
 
 
 
 }
-    20fc:	08 95       	ret
+    24c8:	08 95       	ret
 
-000020fe <_Z17send_bit_sequencePi>:
-const int WAITING_TIME=295; //65 //995
+000024ca <_Z17send_bit_sequencePi>:
+const int WAITING_TIME=65; //65 //995
 
 
 
 
 Message send_bit_sequence(int bits_to_send[]){
-    20fe:	0f 93       	push	r16
-    2100:	1f 93       	push	r17
-    2102:	8c 01       	movw	r16, r24
+    24ca:	0f 93       	push	r16
+    24cc:	1f 93       	push	r17
+    24ce:	8c 01       	movw	r16, r24
 	Message msg(bits_to_send);
-    2104:	0e 94 03 0b 	call	0x1606	; 0x1606 <_ZN7MessageC1EPi>
+    24d0:	0e 94 03 0b 	call	0x1606	; 0x1606 <_ZN7MessageC1EPi>
 	return msg;
 
 
 }
-    2108:	c8 01       	movw	r24, r16
-    210a:	1f 91       	pop	r17
-    210c:	0f 91       	pop	r16
-    210e:	08 95       	ret
+    24d4:	c8 01       	movw	r24, r16
+    24d6:	1f 91       	pop	r17
+    24d8:	0f 91       	pop	r16
+    24da:	08 95       	ret
 
-00002110 <setup>:
-
+000024dc <setup>:
+}
 
 
 
 
 void setup() {
-    2110:	0f 93       	push	r16
-    2112:	1f 93       	push	r17
-    2114:	df 93       	push	r29
-    2116:	cf 93       	push	r28
-    2118:	cd b7       	in	r28, 0x3d	; 61
-    211a:	de b7       	in	r29, 0x3e	; 62
-    211c:	62 97       	sbiw	r28, 0x12	; 18
-    211e:	0f b6       	in	r0, 0x3f	; 63
-    2120:	f8 94       	cli
-    2122:	de bf       	out	0x3e, r29	; 62
-    2124:	0f be       	out	0x3f, r0	; 63
-    2126:	cd bf       	out	0x3d, r28	; 61
+    24dc:	0f 93       	push	r16
+    24de:	1f 93       	push	r17
+    24e0:	df 93       	push	r29
+    24e2:	cf 93       	push	r28
+    24e4:	cd b7       	in	r28, 0x3d	; 61
+    24e6:	de b7       	in	r29, 0x3e	; 62
+    24e8:	62 97       	sbiw	r28, 0x12	; 18
+    24ea:	0f b6       	in	r0, 0x3f	; 63
+    24ec:	f8 94       	cli
+    24ee:	de bf       	out	0x3e, r29	; 62
+    24f0:	0f be       	out	0x3f, r0	; 63
+    24f2:	cd bf       	out	0x3d, r28	; 61
 	//Timer1.initialize(30000);
 	//Timer1.attachInterrupt(send_bit);
   (*msg)= send_bit_sequence(msg1_bits);
-    2128:	00 91 72 02 	lds	r16, 0x0272
-    212c:	10 91 73 02 	lds	r17, 0x0273
-    2130:	ce 01       	movw	r24, r28
-    2132:	01 96       	adiw	r24, 0x01	; 1
-    2134:	65 e0       	ldi	r22, 0x05	; 5
-    2136:	71 e0       	ldi	r23, 0x01	; 1
-    2138:	0e 94 7f 10 	call	0x20fe	; 0x20fe <_Z17send_bit_sequencePi>
+    24f4:	00 91 72 02 	lds	r16, 0x0272
+    24f8:	10 91 73 02 	lds	r17, 0x0273
+    24fc:	ce 01       	movw	r24, r28
+    24fe:	01 96       	adiw	r24, 0x01	; 1
+    2500:	65 e0       	ldi	r22, 0x05	; 5
+    2502:	71 e0       	ldi	r23, 0x01	; 1
+    2504:	0e 94 65 12 	call	0x24ca	; 0x24ca <_Z17send_bit_sequencePi>
  */
 
 #ifndef MESSAGE_H_
 #define MESSAGE_H_
 
 class Message {
-    213c:	d8 01       	movw	r26, r16
-    213e:	12 96       	adiw	r26, 0x02	; 2
-    2140:	fe 01       	movw	r30, r28
-    2142:	33 96       	adiw	r30, 0x03	; 3
-    2144:	8c e0       	ldi	r24, 0x0C	; 12
-    2146:	01 90       	ld	r0, Z+
-    2148:	0d 92       	st	X+, r0
-    214a:	81 50       	subi	r24, 0x01	; 1
-    214c:	e1 f7       	brne	.-8      	; 0x2146 <setup+0x36>
-    214e:	8f 85       	ldd	r24, Y+15	; 0x0f
-    2150:	98 89       	ldd	r25, Y+16	; 0x10
-    2152:	f8 01       	movw	r30, r16
-    2154:	97 87       	std	Z+15, r25	; 0x0f
-    2156:	86 87       	std	Z+14, r24	; 0x0e
-    2158:	89 89       	ldd	r24, Y+17	; 0x11
-    215a:	9a 89       	ldd	r25, Y+18	; 0x12
-    215c:	91 8b       	std	Z+17, r25	; 0x11
-    215e:	80 8b       	std	Z+16, r24	; 0x10
-    2160:	ce 01       	movw	r24, r28
-    2162:	01 96       	adiw	r24, 0x01	; 1
-    2164:	0e 94 33 0b 	call	0x1666	; 0x1666 <_ZN7MessageD1Ev>
+    2508:	d8 01       	movw	r26, r16
+    250a:	12 96       	adiw	r26, 0x02	; 2
+    250c:	fe 01       	movw	r30, r28
+    250e:	33 96       	adiw	r30, 0x03	; 3
+    2510:	8c e0       	ldi	r24, 0x0C	; 12
+    2512:	01 90       	ld	r0, Z+
+    2514:	0d 92       	st	X+, r0
+    2516:	81 50       	subi	r24, 0x01	; 1
+    2518:	e1 f7       	brne	.-8      	; 0x2512 <setup+0x36>
+    251a:	8f 85       	ldd	r24, Y+15	; 0x0f
+    251c:	98 89       	ldd	r25, Y+16	; 0x10
+    251e:	f8 01       	movw	r30, r16
+    2520:	97 87       	std	Z+15, r25	; 0x0f
+    2522:	86 87       	std	Z+14, r24	; 0x0e
+    2524:	89 89       	ldd	r24, Y+17	; 0x11
+    2526:	9a 89       	ldd	r25, Y+18	; 0x12
+    2528:	91 8b       	std	Z+17, r25	; 0x11
+    252a:	80 8b       	std	Z+16, r24	; 0x10
+    252c:	ce 01       	movw	r24, r28
+    252e:	01 96       	adiw	r24, 0x01	; 1
+    2530:	0e 94 33 0b 	call	0x1666	; 0x1666 <_ZN7MessageD1Ev>
   Wire.begin();
-    2168:	8a eb       	ldi	r24, 0xBA	; 186
-    216a:	92 e0       	ldi	r25, 0x02	; 2
-    216c:	0e 94 8c 11 	call	0x2318	; 0x2318 <_ZN7TwoWire5beginEv>
+    2534:	8a eb       	ldi	r24, 0xBA	; 186
+    2536:	92 e0       	ldi	r25, 0x02	; 2
+    2538:	0e 94 72 13 	call	0x26e4	; 0x26e4 <_ZN7TwoWire5beginEv>
 //  Serial.print((*msg).get_bitvalues()[3]);
 //  Serial.print((*msg).get_bitvalues()[4]);
 //  Serial.println((*msg).get_bitvalues()[5]);
 
 
 }
-    2170:	62 96       	adiw	r28, 0x12	; 18
-    2172:	0f b6       	in	r0, 0x3f	; 63
-    2174:	f8 94       	cli
-    2176:	de bf       	out	0x3e, r29	; 62
-    2178:	0f be       	out	0x3f, r0	; 63
-    217a:	cd bf       	out	0x3d, r28	; 61
-    217c:	cf 91       	pop	r28
-    217e:	df 91       	pop	r29
-    2180:	1f 91       	pop	r17
-    2182:	0f 91       	pop	r16
-    2184:	08 95       	ret
+    253c:	62 96       	adiw	r28, 0x12	; 18
+    253e:	0f b6       	in	r0, 0x3f	; 63
+    2540:	f8 94       	cli
+    2542:	de bf       	out	0x3e, r29	; 62
+    2544:	0f be       	out	0x3f, r0	; 63
+    2546:	cd bf       	out	0x3d, r28	; 61
+    2548:	cf 91       	pop	r28
+    254a:	df 91       	pop	r29
+    254c:	1f 91       	pop	r17
+    254e:	0f 91       	pop	r16
+    2550:	08 95       	ret
 
-00002186 <_ZN7TwoWire17beginTransmissionEi>:
+00002552 <_ZN7TwoWire17beginTransmissionEi>:
 }
 
 void TwoWire::beginTransmission(uint8_t address)
 {
   // indicate that we are transmitting
   transmitting = 1;
-    2186:	81 e0       	ldi	r24, 0x01	; 1
-    2188:	80 93 b9 02 	sts	0x02B9, r24
+    2552:	81 e0       	ldi	r24, 0x01	; 1
+    2554:	80 93 b9 02 	sts	0x02B9, r24
   // set address of targeted slave
   txAddress = address;
-    218c:	60 93 96 02 	sts	0x0296, r22
+    2558:	60 93 96 02 	sts	0x0296, r22
   // reset tx buffer iterator vars
   txBufferIndex = 0;
-    2190:	10 92 b7 02 	sts	0x02B7, r1
+    255c:	10 92 b7 02 	sts	0x02B7, r1
   txBufferLength = 0;
-    2194:	10 92 b8 02 	sts	0x02B8, r1
+    2560:	10 92 b8 02 	sts	0x02B8, r1
 }
 
 void TwoWire::beginTransmission(int address)
 {
   beginTransmission((uint8_t)address);
 }
-    2198:	08 95       	ret
+    2564:	08 95       	ret
 
-0000219a <_ZN7TwoWire9availableEv>:
+00002566 <_ZN7TwoWire9availableEv>:
 }
 
 // must be called in:
 // slave rx event callback
 // or after requestFrom(address, numBytes)
 int TwoWire::available(void)
-    219a:	20 91 95 02 	lds	r18, 0x0295
-    219e:	30 e0       	ldi	r19, 0x00	; 0
-    21a0:	80 91 94 02 	lds	r24, 0x0294
-    21a4:	28 1b       	sub	r18, r24
-    21a6:	31 09       	sbc	r19, r1
+    2566:	20 91 95 02 	lds	r18, 0x0295
+    256a:	30 e0       	ldi	r19, 0x00	; 0
+    256c:	80 91 94 02 	lds	r24, 0x0294
+    2570:	28 1b       	sub	r18, r24
+    2572:	31 09       	sbc	r19, r1
 {
   return rxBufferLength - rxBufferIndex;
 }
-    21a8:	c9 01       	movw	r24, r18
-    21aa:	08 95       	ret
+    2574:	c9 01       	movw	r24, r18
+    2576:	08 95       	ret
 
-000021ac <_ZN7TwoWire4readEv>:
+00002578 <_ZN7TwoWire4readEv>:
 int TwoWire::read(void)
 {
   int value = -1;
   
   // get each successive byte on each call
   if(rxBufferIndex < rxBufferLength){
-    21ac:	40 91 94 02 	lds	r20, 0x0294
-    21b0:	80 91 95 02 	lds	r24, 0x0295
-    21b4:	48 17       	cp	r20, r24
-    21b6:	18 f0       	brcs	.+6      	; 0x21be <_ZN7TwoWire4readEv+0x12>
-    21b8:	2f ef       	ldi	r18, 0xFF	; 255
-    21ba:	3f ef       	ldi	r19, 0xFF	; 255
-    21bc:	0a c0       	rjmp	.+20     	; 0x21d2 <_ZN7TwoWire4readEv+0x26>
+    2578:	40 91 94 02 	lds	r20, 0x0294
+    257c:	80 91 95 02 	lds	r24, 0x0295
+    2580:	48 17       	cp	r20, r24
+    2582:	18 f0       	brcs	.+6      	; 0x258a <_ZN7TwoWire4readEv+0x12>
+    2584:	2f ef       	ldi	r18, 0xFF	; 255
+    2586:	3f ef       	ldi	r19, 0xFF	; 255
+    2588:	0a c0       	rjmp	.+20     	; 0x259e <_ZN7TwoWire4readEv+0x26>
     value = rxBuffer[rxBufferIndex];
-    21be:	e4 2f       	mov	r30, r20
-    21c0:	f0 e0       	ldi	r31, 0x00	; 0
-    21c2:	ec 58       	subi	r30, 0x8C	; 140
-    21c4:	fd 4f       	sbci	r31, 0xFD	; 253
-    21c6:	80 81       	ld	r24, Z
-    21c8:	28 2f       	mov	r18, r24
-    21ca:	30 e0       	ldi	r19, 0x00	; 0
+    258a:	e4 2f       	mov	r30, r20
+    258c:	f0 e0       	ldi	r31, 0x00	; 0
+    258e:	ec 58       	subi	r30, 0x8C	; 140
+    2590:	fd 4f       	sbci	r31, 0xFD	; 253
+    2592:	80 81       	ld	r24, Z
+    2594:	28 2f       	mov	r18, r24
+    2596:	30 e0       	ldi	r19, 0x00	; 0
     ++rxBufferIndex;
-    21cc:	4f 5f       	subi	r20, 0xFF	; 255
-    21ce:	40 93 94 02 	sts	0x0294, r20
+    2598:	4f 5f       	subi	r20, 0xFF	; 255
+    259a:	40 93 94 02 	sts	0x0294, r20
   }
 
   return value;
 }
-    21d2:	c9 01       	movw	r24, r18
-    21d4:	08 95       	ret
+    259e:	c9 01       	movw	r24, r18
+    25a0:	08 95       	ret
 
-000021d6 <_ZN7TwoWire4peekEv>:
+000025a2 <_ZN7TwoWire4peekEv>:
 // or after requestFrom(address, numBytes)
 int TwoWire::peek(void)
 {
   int value = -1;
   
   if(rxBufferIndex < rxBufferLength){
-    21d6:	e0 91 94 02 	lds	r30, 0x0294
-    21da:	80 91 95 02 	lds	r24, 0x0295
-    21de:	e8 17       	cp	r30, r24
-    21e0:	18 f0       	brcs	.+6      	; 0x21e8 <_ZN7TwoWire4peekEv+0x12>
-    21e2:	ef ef       	ldi	r30, 0xFF	; 255
-    21e4:	ff ef       	ldi	r31, 0xFF	; 255
-    21e6:	06 c0       	rjmp	.+12     	; 0x21f4 <_ZN7TwoWire4peekEv+0x1e>
+    25a2:	e0 91 94 02 	lds	r30, 0x0294
+    25a6:	80 91 95 02 	lds	r24, 0x0295
+    25aa:	e8 17       	cp	r30, r24
+    25ac:	18 f0       	brcs	.+6      	; 0x25b4 <_ZN7TwoWire4peekEv+0x12>
+    25ae:	ef ef       	ldi	r30, 0xFF	; 255
+    25b0:	ff ef       	ldi	r31, 0xFF	; 255
+    25b2:	06 c0       	rjmp	.+12     	; 0x25c0 <_ZN7TwoWire4peekEv+0x1e>
     value = rxBuffer[rxBufferIndex];
-    21e8:	f0 e0       	ldi	r31, 0x00	; 0
-    21ea:	ec 58       	subi	r30, 0x8C	; 140
-    21ec:	fd 4f       	sbci	r31, 0xFD	; 253
-    21ee:	80 81       	ld	r24, Z
-    21f0:	e8 2f       	mov	r30, r24
-    21f2:	f0 e0       	ldi	r31, 0x00	; 0
+    25b4:	f0 e0       	ldi	r31, 0x00	; 0
+    25b6:	ec 58       	subi	r30, 0x8C	; 140
+    25b8:	fd 4f       	sbci	r31, 0xFD	; 253
+    25ba:	80 81       	ld	r24, Z
+    25bc:	e8 2f       	mov	r30, r24
+    25be:	f0 e0       	ldi	r31, 0x00	; 0
   }
 
   return value;
 }
-    21f4:	cf 01       	movw	r24, r30
-    21f6:	08 95       	ret
+    25c0:	cf 01       	movw	r24, r30
+    25c2:	08 95       	ret
 
-000021f8 <_ZN7TwoWire5flushEv>:
+000025c4 <_ZN7TwoWire5flushEv>:
 
 void TwoWire::flush(void)
 {
   // XXX: to be implemented.
 }
-    21f8:	08 95       	ret
+    25c4:	08 95       	ret
 
-000021fa <_GLOBAL__I__ZN7TwoWire8rxBufferE>:
+000025c6 <_GLOBAL__I__ZN7TwoWire8rxBufferE>:
     size_t printNumber(unsigned long, uint8_t);
     size_t printFloat(double, uint8_t);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
   public:
     Print() : write_error(0) {}
-    21fa:	10 92 bd 02 	sts	0x02BD, r1
-    21fe:	10 92 bc 02 	sts	0x02BC, r1
+    25c6:	10 92 bd 02 	sts	0x02BD, r1
+    25ca:	10 92 bc 02 	sts	0x02BC, r1
     virtual int available() = 0;
     virtual int read() = 0;
     virtual int peek() = 0;
     virtual void flush() = 0;
 
     Stream() {_timeout=1000;}
-    2202:	88 ee       	ldi	r24, 0xE8	; 232
-    2204:	93 e0       	ldi	r25, 0x03	; 3
-    2206:	a0 e0       	ldi	r26, 0x00	; 0
-    2208:	b0 e0       	ldi	r27, 0x00	; 0
-    220a:	80 93 be 02 	sts	0x02BE, r24
-    220e:	90 93 bf 02 	sts	0x02BF, r25
-    2212:	a0 93 c0 02 	sts	0x02C0, r26
-    2216:	b0 93 c1 02 	sts	0x02C1, r27
+    25ce:	88 ee       	ldi	r24, 0xE8	; 232
+    25d0:	93 e0       	ldi	r25, 0x03	; 3
+    25d2:	a0 e0       	ldi	r26, 0x00	; 0
+    25d4:	b0 e0       	ldi	r27, 0x00	; 0
+    25d6:	80 93 be 02 	sts	0x02BE, r24
+    25da:	90 93 bf 02 	sts	0x02BF, r25
+    25de:	a0 93 c0 02 	sts	0x02C0, r26
+    25e2:	b0 93 c1 02 	sts	0x02C1, r27
 void (*TwoWire::user_onRequest)(void);
 void (*TwoWire::user_onReceive)(int);
 
 // Constructors ////////////////////////////////////////////////////////////////
 
 TwoWire::TwoWire()
-    221a:	83 e3       	ldi	r24, 0x33	; 51
-    221c:	91 e0       	ldi	r25, 0x01	; 1
-    221e:	90 93 bb 02 	sts	0x02BB, r25
-    2222:	80 93 ba 02 	sts	0x02BA, r24
+    25e6:	83 e3       	ldi	r24, 0x33	; 51
+    25e8:	91 e0       	ldi	r25, 0x01	; 1
+    25ea:	90 93 bb 02 	sts	0x02BB, r25
+    25ee:	80 93 ba 02 	sts	0x02BA, r24
   user_onRequest = function;
 }
 
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
 TwoWire Wire = TwoWire();
-    2226:	08 95       	ret
+    25f2:	08 95       	ret
 
-00002228 <_ZN7TwoWire5writeEPKhj>:
+000025f4 <_ZN7TwoWire5writeEPKhj>:
 }
 
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
 size_t TwoWire::write(const uint8_t *data, size_t quantity)
-    2228:	cf 92       	push	r12
-    222a:	df 92       	push	r13
-    222c:	ef 92       	push	r14
-    222e:	ff 92       	push	r15
-    2230:	0f 93       	push	r16
-    2232:	1f 93       	push	r17
-    2234:	cf 93       	push	r28
-    2236:	df 93       	push	r29
-    2238:	7c 01       	movw	r14, r24
-    223a:	6b 01       	movw	r12, r22
-    223c:	8a 01       	movw	r16, r20
+    25f4:	cf 92       	push	r12
+    25f6:	df 92       	push	r13
+    25f8:	ef 92       	push	r14
+    25fa:	ff 92       	push	r15
+    25fc:	0f 93       	push	r16
+    25fe:	1f 93       	push	r17
+    2600:	cf 93       	push	r28
+    2602:	df 93       	push	r29
+    2604:	7c 01       	movw	r14, r24
+    2606:	6b 01       	movw	r12, r22
+    2608:	8a 01       	movw	r16, r20
 {
   if(transmitting){
-    223e:	80 91 b9 02 	lds	r24, 0x02B9
-    2242:	88 23       	and	r24, r24
-    2244:	a1 f0       	breq	.+40     	; 0x226e <_ZN7TwoWire5writeEPKhj+0x46>
-    2246:	c0 e0       	ldi	r28, 0x00	; 0
-    2248:	d0 e0       	ldi	r29, 0x00	; 0
-    224a:	0d c0       	rjmp	.+26     	; 0x2266 <_ZN7TwoWire5writeEPKhj+0x3e>
+    260a:	80 91 b9 02 	lds	r24, 0x02B9
+    260e:	88 23       	and	r24, r24
+    2610:	a1 f0       	breq	.+40     	; 0x263a <_ZN7TwoWire5writeEPKhj+0x46>
+    2612:	c0 e0       	ldi	r28, 0x00	; 0
+    2614:	d0 e0       	ldi	r29, 0x00	; 0
+    2616:	0d c0       	rjmp	.+26     	; 0x2632 <_ZN7TwoWire5writeEPKhj+0x3e>
   // in master transmitter mode
     for(size_t i = 0; i < quantity; ++i){
       write(data[i]);
-    224c:	d7 01       	movw	r26, r14
-    224e:	ed 91       	ld	r30, X+
-    2250:	fc 91       	ld	r31, X
-    2252:	d6 01       	movw	r26, r12
-    2254:	ac 0f       	add	r26, r28
-    2256:	bd 1f       	adc	r27, r29
-    2258:	01 90       	ld	r0, Z+
-    225a:	f0 81       	ld	r31, Z
-    225c:	e0 2d       	mov	r30, r0
-    225e:	c7 01       	movw	r24, r14
-    2260:	6c 91       	ld	r22, X
-    2262:	09 95       	icall
+    2618:	d7 01       	movw	r26, r14
+    261a:	ed 91       	ld	r30, X+
+    261c:	fc 91       	ld	r31, X
+    261e:	d6 01       	movw	r26, r12
+    2620:	ac 0f       	add	r26, r28
+    2622:	bd 1f       	adc	r27, r29
+    2624:	01 90       	ld	r0, Z+
+    2626:	f0 81       	ld	r31, Z
+    2628:	e0 2d       	mov	r30, r0
+    262a:	c7 01       	movw	r24, r14
+    262c:	6c 91       	ld	r22, X
+    262e:	09 95       	icall
 // or after beginTransmission(address)
 size_t TwoWire::write(const uint8_t *data, size_t quantity)
 {
   if(transmitting){
   // in master transmitter mode
     for(size_t i = 0; i < quantity; ++i){
-    2264:	21 96       	adiw	r28, 0x01	; 1
-    2266:	c0 17       	cp	r28, r16
-    2268:	d1 07       	cpc	r29, r17
-    226a:	80 f3       	brcs	.-32     	; 0x224c <_ZN7TwoWire5writeEPKhj+0x24>
-    226c:	04 c0       	rjmp	.+8      	; 0x2276 <_ZN7TwoWire5writeEPKhj+0x4e>
+    2630:	21 96       	adiw	r28, 0x01	; 1
+    2632:	c0 17       	cp	r28, r16
+    2634:	d1 07       	cpc	r29, r17
+    2636:	80 f3       	brcs	.-32     	; 0x2618 <_ZN7TwoWire5writeEPKhj+0x24>
+    2638:	04 c0       	rjmp	.+8      	; 0x2642 <_ZN7TwoWire5writeEPKhj+0x4e>
       write(data[i]);
     }
   }else{
   // in slave send mode
     // reply to master
     twi_transmit(data, quantity);
-    226e:	cb 01       	movw	r24, r22
-    2270:	64 2f       	mov	r22, r20
-    2272:	0e 94 ba 05 	call	0xb74	; 0xb74 <twi_transmit>
+    263a:	cb 01       	movw	r24, r22
+    263c:	64 2f       	mov	r22, r20
+    263e:	0e 94 ba 05 	call	0xb74	; 0xb74 <twi_transmit>
   }
   return quantity;
 }
-    2276:	c8 01       	movw	r24, r16
-    2278:	df 91       	pop	r29
-    227a:	cf 91       	pop	r28
-    227c:	1f 91       	pop	r17
-    227e:	0f 91       	pop	r16
-    2280:	ff 90       	pop	r15
-    2282:	ef 90       	pop	r14
-    2284:	df 90       	pop	r13
-    2286:	cf 90       	pop	r12
-    2288:	08 95       	ret
+    2642:	c8 01       	movw	r24, r16
+    2644:	df 91       	pop	r29
+    2646:	cf 91       	pop	r28
+    2648:	1f 91       	pop	r17
+    264a:	0f 91       	pop	r16
+    264c:	ff 90       	pop	r15
+    264e:	ef 90       	pop	r14
+    2650:	df 90       	pop	r13
+    2652:	cf 90       	pop	r12
+    2654:	08 95       	ret
 
-0000228a <_ZN7TwoWire5writeEh>:
+00002656 <_ZN7TwoWire5writeEh>:
 }
 
 // must be called in:
 // slave tx event callback
 // or after beginTransmission(address)
 size_t TwoWire::write(uint8_t data)
-    228a:	df 93       	push	r29
-    228c:	cf 93       	push	r28
-    228e:	0f 92       	push	r0
-    2290:	cd b7       	in	r28, 0x3d	; 61
-    2292:	de b7       	in	r29, 0x3e	; 62
-    2294:	fc 01       	movw	r30, r24
-    2296:	69 83       	std	Y+1, r22	; 0x01
+    2656:	df 93       	push	r29
+    2658:	cf 93       	push	r28
+    265a:	0f 92       	push	r0
+    265c:	cd b7       	in	r28, 0x3d	; 61
+    265e:	de b7       	in	r29, 0x3e	; 62
+    2660:	fc 01       	movw	r30, r24
+    2662:	69 83       	std	Y+1, r22	; 0x01
 {
   if(transmitting){
-    2298:	80 91 b9 02 	lds	r24, 0x02B9
-    229c:	88 23       	and	r24, r24
-    229e:	c9 f0       	breq	.+50     	; 0x22d2 <_ZN7TwoWire5writeEh+0x48>
+    2664:	80 91 b9 02 	lds	r24, 0x02B9
+    2668:	88 23       	and	r24, r24
+    266a:	c9 f0       	breq	.+50     	; 0x269e <_ZN7TwoWire5writeEh+0x48>
   // in master transmitter mode
     // don't bother if buffer is full
     if(txBufferLength >= BUFFER_LENGTH){
-    22a0:	80 91 b8 02 	lds	r24, 0x02B8
-    22a4:	80 32       	cpi	r24, 0x20	; 32
-    22a6:	38 f0       	brcs	.+14     	; 0x22b6 <_ZN7TwoWire5writeEh+0x2c>
+    266c:	80 91 b8 02 	lds	r24, 0x02B8
+    2670:	80 32       	cpi	r24, 0x20	; 32
+    2672:	38 f0       	brcs	.+14     	; 0x2682 <_ZN7TwoWire5writeEh+0x2c>
   private:
     int write_error;
     size_t printNumber(unsigned long, uint8_t);
     size_t printFloat(double, uint8_t);
   protected:
     void setWriteError(int err = 1) { write_error = err; }
-    22a8:	81 e0       	ldi	r24, 0x01	; 1
-    22aa:	90 e0       	ldi	r25, 0x00	; 0
-    22ac:	93 83       	std	Z+3, r25	; 0x03
-    22ae:	82 83       	std	Z+2, r24	; 0x02
-    22b0:	20 e0       	ldi	r18, 0x00	; 0
-    22b2:	30 e0       	ldi	r19, 0x00	; 0
-    22b4:	15 c0       	rjmp	.+42     	; 0x22e0 <_ZN7TwoWire5writeEh+0x56>
+    2674:	81 e0       	ldi	r24, 0x01	; 1
+    2676:	90 e0       	ldi	r25, 0x00	; 0
+    2678:	93 83       	std	Z+3, r25	; 0x03
+    267a:	82 83       	std	Z+2, r24	; 0x02
+    267c:	20 e0       	ldi	r18, 0x00	; 0
+    267e:	30 e0       	ldi	r19, 0x00	; 0
+    2680:	15 c0       	rjmp	.+42     	; 0x26ac <_ZN7TwoWire5writeEh+0x56>
       setWriteError();
       return 0;
     }
     // put byte in tx buffer
     txBuffer[txBufferIndex] = data;
-    22b6:	80 91 b7 02 	lds	r24, 0x02B7
-    22ba:	e8 2f       	mov	r30, r24
-    22bc:	f0 e0       	ldi	r31, 0x00	; 0
-    22be:	e9 56       	subi	r30, 0x69	; 105
-    22c0:	fd 4f       	sbci	r31, 0xFD	; 253
-    22c2:	99 81       	ldd	r25, Y+1	; 0x01
-    22c4:	90 83       	st	Z, r25
+    2682:	80 91 b7 02 	lds	r24, 0x02B7
+    2686:	e8 2f       	mov	r30, r24
+    2688:	f0 e0       	ldi	r31, 0x00	; 0
+    268a:	e9 56       	subi	r30, 0x69	; 105
+    268c:	fd 4f       	sbci	r31, 0xFD	; 253
+    268e:	99 81       	ldd	r25, Y+1	; 0x01
+    2690:	90 83       	st	Z, r25
     ++txBufferIndex;
-    22c6:	8f 5f       	subi	r24, 0xFF	; 255
-    22c8:	80 93 b7 02 	sts	0x02B7, r24
+    2692:	8f 5f       	subi	r24, 0xFF	; 255
+    2694:	80 93 b7 02 	sts	0x02B7, r24
     // update amount in buffer   
     txBufferLength = txBufferIndex;
-    22cc:	80 93 b8 02 	sts	0x02B8, r24
-    22d0:	05 c0       	rjmp	.+10     	; 0x22dc <_ZN7TwoWire5writeEh+0x52>
+    2698:	80 93 b8 02 	sts	0x02B8, r24
+    269c:	05 c0       	rjmp	.+10     	; 0x26a8 <_ZN7TwoWire5writeEh+0x52>
   }else{
   // in slave send mode
     // reply to master
     twi_transmit(&data, 1);
-    22d2:	ce 01       	movw	r24, r28
-    22d4:	01 96       	adiw	r24, 0x01	; 1
-    22d6:	61 e0       	ldi	r22, 0x01	; 1
-    22d8:	0e 94 ba 05 	call	0xb74	; 0xb74 <twi_transmit>
-    22dc:	21 e0       	ldi	r18, 0x01	; 1
-    22de:	30 e0       	ldi	r19, 0x00	; 0
+    269e:	ce 01       	movw	r24, r28
+    26a0:	01 96       	adiw	r24, 0x01	; 1
+    26a2:	61 e0       	ldi	r22, 0x01	; 1
+    26a4:	0e 94 ba 05 	call	0xb74	; 0xb74 <twi_transmit>
+    26a8:	21 e0       	ldi	r18, 0x01	; 1
+    26aa:	30 e0       	ldi	r19, 0x00	; 0
   }
   return 1;
 }
-    22e0:	c9 01       	movw	r24, r18
-    22e2:	0f 90       	pop	r0
-    22e4:	cf 91       	pop	r28
-    22e6:	df 91       	pop	r29
-    22e8:	08 95       	ret
+    26ac:	c9 01       	movw	r24, r18
+    26ae:	0f 90       	pop	r0
+    26b0:	cf 91       	pop	r28
+    26b2:	df 91       	pop	r29
+    26b4:	08 95       	ret
 
-000022ea <_ZN7TwoWire15endTransmissionEh>:
+000026b6 <_ZN7TwoWire15endTransmissionEh>:
 //	the bus tenure has been properly ended with a STOP. It
 //	is very possible to leave the bus in a hung state if
 //	no call to endTransmission(true) is made. Some I2C
 //	devices will behave oddly if they do not see a STOP.
 //
 uint8_t TwoWire::endTransmission(uint8_t sendStop)
-    22ea:	0f 93       	push	r16
-    22ec:	06 2f       	mov	r16, r22
+    26b6:	0f 93       	push	r16
+    26b8:	06 2f       	mov	r16, r22
 {
   // transmit buffer (blocking)
   int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
-    22ee:	80 91 96 02 	lds	r24, 0x0296
-    22f2:	67 e9       	ldi	r22, 0x97	; 151
-    22f4:	72 e0       	ldi	r23, 0x02	; 2
-    22f6:	40 91 b8 02 	lds	r20, 0x02B8
-    22fa:	21 e0       	ldi	r18, 0x01	; 1
-    22fc:	0e 94 65 05 	call	0xaca	; 0xaca <twi_writeTo>
+    26ba:	80 91 96 02 	lds	r24, 0x0296
+    26be:	67 e9       	ldi	r22, 0x97	; 151
+    26c0:	72 e0       	ldi	r23, 0x02	; 2
+    26c2:	40 91 b8 02 	lds	r20, 0x02B8
+    26c6:	21 e0       	ldi	r18, 0x01	; 1
+    26c8:	0e 94 65 05 	call	0xaca	; 0xaca <twi_writeTo>
   // reset tx buffer iterator vars
   txBufferIndex = 0;
-    2300:	10 92 b7 02 	sts	0x02B7, r1
+    26cc:	10 92 b7 02 	sts	0x02B7, r1
   txBufferLength = 0;
-    2304:	10 92 b8 02 	sts	0x02B8, r1
+    26d0:	10 92 b8 02 	sts	0x02B8, r1
   // indicate that we are done transmitting
   transmitting = 0;
-    2308:	10 92 b9 02 	sts	0x02B9, r1
+    26d4:	10 92 b9 02 	sts	0x02B9, r1
   return ret;
 }
-    230c:	0f 91       	pop	r16
-    230e:	08 95       	ret
+    26d8:	0f 91       	pop	r16
+    26da:	08 95       	ret
 
-00002310 <_ZN7TwoWire15endTransmissionEv>:
+000026dc <_ZN7TwoWire15endTransmissionEv>:
 //	This provides backwards compatibility with the original
 //	definition, and expected behaviour, of endTransmission
 //
 uint8_t TwoWire::endTransmission(void)
 {
   return endTransmission(true);
-    2310:	61 e0       	ldi	r22, 0x01	; 1
-    2312:	0e 94 75 11 	call	0x22ea	; 0x22ea <_ZN7TwoWire15endTransmissionEh>
+    26dc:	61 e0       	ldi	r22, 0x01	; 1
+    26de:	0e 94 5b 13 	call	0x26b6	; 0x26b6 <_ZN7TwoWire15endTransmissionEh>
 }
-    2316:	08 95       	ret
+    26e2:	08 95       	ret
 
-00002318 <_ZN7TwoWire5beginEv>:
+000026e4 <_ZN7TwoWire5beginEv>:
 
 // Public Methods //////////////////////////////////////////////////////////////
 
 void TwoWire::begin(void)
 {
   rxBufferIndex = 0;
-    2318:	10 92 94 02 	sts	0x0294, r1
+    26e4:	10 92 94 02 	sts	0x0294, r1
   rxBufferLength = 0;
-    231c:	10 92 95 02 	sts	0x0295, r1
+    26e8:	10 92 95 02 	sts	0x0295, r1
 
   txBufferIndex = 0;
-    2320:	10 92 b7 02 	sts	0x02B7, r1
+    26ec:	10 92 b7 02 	sts	0x02B7, r1
   txBufferLength = 0;
-    2324:	10 92 b8 02 	sts	0x02B8, r1
+    26f0:	10 92 b8 02 	sts	0x02B8, r1
 
   twi_init();
-    2328:	0e 94 88 07 	call	0xf10	; 0xf10 <twi_init>
+    26f4:	0e 94 88 07 	call	0xf10	; 0xf10 <twi_init>
 }
-    232c:	08 95       	ret
+    26f8:	08 95       	ret
 
-0000232e <__mulsi3>:
-    232e:	62 9f       	mul	r22, r18
-    2330:	d0 01       	movw	r26, r0
-    2332:	73 9f       	mul	r23, r19
-    2334:	f0 01       	movw	r30, r0
-    2336:	82 9f       	mul	r24, r18
-    2338:	e0 0d       	add	r30, r0
-    233a:	f1 1d       	adc	r31, r1
-    233c:	64 9f       	mul	r22, r20
-    233e:	e0 0d       	add	r30, r0
-    2340:	f1 1d       	adc	r31, r1
-    2342:	92 9f       	mul	r25, r18
-    2344:	f0 0d       	add	r31, r0
-    2346:	83 9f       	mul	r24, r19
-    2348:	f0 0d       	add	r31, r0
-    234a:	74 9f       	mul	r23, r20
-    234c:	f0 0d       	add	r31, r0
-    234e:	65 9f       	mul	r22, r21
-    2350:	f0 0d       	add	r31, r0
-    2352:	99 27       	eor	r25, r25
-    2354:	72 9f       	mul	r23, r18
-    2356:	b0 0d       	add	r27, r0
-    2358:	e1 1d       	adc	r30, r1
-    235a:	f9 1f       	adc	r31, r25
-    235c:	63 9f       	mul	r22, r19
-    235e:	b0 0d       	add	r27, r0
-    2360:	e1 1d       	adc	r30, r1
-    2362:	f9 1f       	adc	r31, r25
-    2364:	bd 01       	movw	r22, r26
-    2366:	cf 01       	movw	r24, r30
-    2368:	11 24       	eor	r1, r1
-    236a:	08 95       	ret
+000026fa <__mulsi3>:
+    26fa:	62 9f       	mul	r22, r18
+    26fc:	d0 01       	movw	r26, r0
+    26fe:	73 9f       	mul	r23, r19
+    2700:	f0 01       	movw	r30, r0
+    2702:	82 9f       	mul	r24, r18
+    2704:	e0 0d       	add	r30, r0
+    2706:	f1 1d       	adc	r31, r1
+    2708:	64 9f       	mul	r22, r20
+    270a:	e0 0d       	add	r30, r0
+    270c:	f1 1d       	adc	r31, r1
+    270e:	92 9f       	mul	r25, r18
+    2710:	f0 0d       	add	r31, r0
+    2712:	83 9f       	mul	r24, r19
+    2714:	f0 0d       	add	r31, r0
+    2716:	74 9f       	mul	r23, r20
+    2718:	f0 0d       	add	r31, r0
+    271a:	65 9f       	mul	r22, r21
+    271c:	f0 0d       	add	r31, r0
+    271e:	99 27       	eor	r25, r25
+    2720:	72 9f       	mul	r23, r18
+    2722:	b0 0d       	add	r27, r0
+    2724:	e1 1d       	adc	r30, r1
+    2726:	f9 1f       	adc	r31, r25
+    2728:	63 9f       	mul	r22, r19
+    272a:	b0 0d       	add	r27, r0
+    272c:	e1 1d       	adc	r30, r1
+    272e:	f9 1f       	adc	r31, r25
+    2730:	bd 01       	movw	r22, r26
+    2732:	cf 01       	movw	r24, r30
+    2734:	11 24       	eor	r1, r1
+    2736:	08 95       	ret
 
-0000236c <__udivmodsi4>:
-    236c:	a1 e2       	ldi	r26, 0x21	; 33
-    236e:	1a 2e       	mov	r1, r26
-    2370:	aa 1b       	sub	r26, r26
-    2372:	bb 1b       	sub	r27, r27
-    2374:	fd 01       	movw	r30, r26
-    2376:	0d c0       	rjmp	.+26     	; 0x2392 <__udivmodsi4_ep>
+00002738 <__udivmodsi4>:
+    2738:	a1 e2       	ldi	r26, 0x21	; 33
+    273a:	1a 2e       	mov	r1, r26
+    273c:	aa 1b       	sub	r26, r26
+    273e:	bb 1b       	sub	r27, r27
+    2740:	fd 01       	movw	r30, r26
+    2742:	0d c0       	rjmp	.+26     	; 0x275e <__udivmodsi4_ep>
 
-00002378 <__udivmodsi4_loop>:
-    2378:	aa 1f       	adc	r26, r26
-    237a:	bb 1f       	adc	r27, r27
-    237c:	ee 1f       	adc	r30, r30
-    237e:	ff 1f       	adc	r31, r31
-    2380:	a2 17       	cp	r26, r18
-    2382:	b3 07       	cpc	r27, r19
-    2384:	e4 07       	cpc	r30, r20
-    2386:	f5 07       	cpc	r31, r21
-    2388:	20 f0       	brcs	.+8      	; 0x2392 <__udivmodsi4_ep>
-    238a:	a2 1b       	sub	r26, r18
-    238c:	b3 0b       	sbc	r27, r19
-    238e:	e4 0b       	sbc	r30, r20
-    2390:	f5 0b       	sbc	r31, r21
+00002744 <__udivmodsi4_loop>:
+    2744:	aa 1f       	adc	r26, r26
+    2746:	bb 1f       	adc	r27, r27
+    2748:	ee 1f       	adc	r30, r30
+    274a:	ff 1f       	adc	r31, r31
+    274c:	a2 17       	cp	r26, r18
+    274e:	b3 07       	cpc	r27, r19
+    2750:	e4 07       	cpc	r30, r20
+    2752:	f5 07       	cpc	r31, r21
+    2754:	20 f0       	brcs	.+8      	; 0x275e <__udivmodsi4_ep>
+    2756:	a2 1b       	sub	r26, r18
+    2758:	b3 0b       	sbc	r27, r19
+    275a:	e4 0b       	sbc	r30, r20
+    275c:	f5 0b       	sbc	r31, r21
 
-00002392 <__udivmodsi4_ep>:
-    2392:	66 1f       	adc	r22, r22
-    2394:	77 1f       	adc	r23, r23
-    2396:	88 1f       	adc	r24, r24
-    2398:	99 1f       	adc	r25, r25
-    239a:	1a 94       	dec	r1
-    239c:	69 f7       	brne	.-38     	; 0x2378 <__udivmodsi4_loop>
-    239e:	60 95       	com	r22
-    23a0:	70 95       	com	r23
-    23a2:	80 95       	com	r24
-    23a4:	90 95       	com	r25
-    23a6:	9b 01       	movw	r18, r22
-    23a8:	ac 01       	movw	r20, r24
-    23aa:	bd 01       	movw	r22, r26
-    23ac:	cf 01       	movw	r24, r30
-    23ae:	08 95       	ret
+0000275e <__udivmodsi4_ep>:
+    275e:	66 1f       	adc	r22, r22
+    2760:	77 1f       	adc	r23, r23
+    2762:	88 1f       	adc	r24, r24
+    2764:	99 1f       	adc	r25, r25
+    2766:	1a 94       	dec	r1
+    2768:	69 f7       	brne	.-38     	; 0x2744 <__udivmodsi4_loop>
+    276a:	60 95       	com	r22
+    276c:	70 95       	com	r23
+    276e:	80 95       	com	r24
+    2770:	90 95       	com	r25
+    2772:	9b 01       	movw	r18, r22
+    2774:	ac 01       	movw	r20, r24
+    2776:	bd 01       	movw	r22, r26
+    2778:	cf 01       	movw	r24, r30
+    277a:	08 95       	ret
 
-000023b0 <__tablejump2__>:
-    23b0:	ee 0f       	add	r30, r30
-    23b2:	ff 1f       	adc	r31, r31
+0000277c <__tablejump2__>:
+    277c:	ee 0f       	add	r30, r30
+    277e:	ff 1f       	adc	r31, r31
 
-000023b4 <__tablejump__>:
-    23b4:	05 90       	lpm	r0, Z+
-    23b6:	f4 91       	lpm	r31, Z+
-    23b8:	e0 2d       	mov	r30, r0
-    23ba:	09 94       	ijmp
+00002780 <__tablejump__>:
+    2780:	05 90       	lpm	r0, Z+
+    2782:	f4 91       	lpm	r31, Z+
+    2784:	e0 2d       	mov	r30, r0
+    2786:	09 94       	ijmp
 
-000023bc <_exit>:
-    23bc:	f8 94       	cli
+00002788 <_exit>:
+    2788:	f8 94       	cli
 
-000023be <__stop_program>:
-    23be:	ff cf       	rjmp	.-2      	; 0x23be <__stop_program>
+0000278a <__stop_program>:
+    278a:	ff cf       	rjmp	.-2      	; 0x278a <__stop_program>

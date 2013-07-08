@@ -18,7 +18,7 @@ int counter=0;
 int msg1_bits[]={1,0,1,0,1,0};
 Message *msg;
 int msg_bit=0;
-const int WAITING_TIME=295; //65 //995
+const int WAITING_TIME=65; //65 //995
 
 
 
@@ -28,19 +28,6 @@ Message send_bit_sequence(int bits_to_send[]){
 	return msg;
 
 
-}
-
-void activate_receiving_mode(){
-
-	/*
-		   *Activate receiver to listen to the channel
-		   */
-
-		  Wire.beginTransmission(113);
-		  Wire.write(byte(0x00)); // Register 0 -> control register
-		  Wire.write(byte(0x58)); // look
-		  Wire.endTransmission();
-		  delay(2);
 }
 
 
@@ -87,68 +74,6 @@ void send_bit(){
 
 
 }
-
-
-void read_firmware(){
-	  Wire.beginTransmission(113);
-	  Wire.write(byte(0x00)); // Register 0 -> control register
-	  Wire.endTransmission();
-	  delay(2);
-
-	  Wire.requestFrom(113,1);
-	  controllerReadout=Wire.read();
-	  Serial.print("ControllerReadoutFirmware0: ");
-	  Serial.println(controllerReadout);
-	  controllerReadout=-1;
-}
-
-void receive_bit(){
-	  /*
-	   *	Received Impulses
-	   */
-
-	  Wire.beginTransmission(113);
-	  Wire.write(byte(0x00)); // Register 0 -> control register
-	  Wire.endTransmission();
-	  delay(2);
-
-
-	  while(controllerReadout==-1)
-	    {
-
-
-		  Wire.requestFrom(113,1);
-		  controllerReadout=Wire.read();
-		  Serial.print("ControllerReadoutFirmware: ");
-		  Serial.println(controllerReadout);
-
-	    }
-
-
-	  /*
-	   *  Pointer to Register 0x02
-	   */
-
-	  Wire.beginTransmission(113); // transmit to device #112
-	  Wire.write(byte(0x02));      // sets register pointer to echo #1 register (0x02)
-	  Wire.endTransmission();      // stop transmitting
-	  delay(2);
-
-	  /*
-	   * Read values
-	   */
-
-	  Wire.requestFrom(113,2);
-	  reading=Wire.read();
-	  reading = reading << 8;    // shift high byte to be high 8 bits
-	  reading |= Wire.read();
-	  Serial.print("Seconds: ");
-	  Serial.println(reading);
-
-	  Serial.print("DATA-BIT: ");
-	  Serial.println("*************");
-}
-
 
 
 
@@ -582,6 +507,156 @@ void loop() {
 		send_bit_0();
 		delay(WAITING_TIME);
 		delay(10000);
+
+
+		//HEADER_START
+			send_bit_1();
+			delay(WAITING_TIME);
+
+			//MSG_TYPE 2
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_0();
+			delay(WAITING_TIME);
+
+
+
+			//MAC_FROM
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_0();
+			delay(WAITING_TIME);
+
+			//MAC_TO
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_1();
+			delay(WAITING_TIME);
+
+
+			//DATA_SIZE 3 bytes
+
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_1();
+			delay(WAITING_TIME);
+
+			//DATA 1st byte
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_1();
+			delay(WAITING_TIME);
+
+
+			//DATA 2nd byte
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_0();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_1();
+			delay(WAITING_TIME);
+
+			//DATA 3rd byte
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			send_bit_1();
+			delay(WAITING_TIME);
+			//Parity_BIT
+			send_bit_1();
+			delay(WAITING_TIME);
+			delay(10000);
 	//test
 
 
